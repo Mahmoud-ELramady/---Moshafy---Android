@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ui.AboutAppActivity">
+
+
+        <ImageView
+            android:id="@+id/im_image"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_80sdp"
+            android:src="@drawable/logo_moshafy"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="textEnd"
+            android:textSize="@dimen/_12sdp"
+            android:textColor="#000"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:text="تطبيق مُصحفى هو تطبيق دينى يحتوى على أربع أقسام رئيسية:\n\n القرأن:\n وهو يحتوى على القرأن وترجمته بالإنجليزية عند اختيار السوره المراد قرأتها\n\n التلاوات:\n وهو يحتوى على أكثر من 200 قارئ بمختلف التلاوات وإمكانية البحث \n بأسم القارئ أو التلاوة ثم اختيار السورة المراد سماعها مع امكانية تحميل السورة من زر أسفل يمين الشاشه \n\n تفسير القرأن:\n يحتوى على مجموعة كبيره من التفاسير منها العربية والإنجليزية مع اختيار السوره ثم الضغط على الأية المراد تفسيرها\n\n الأذكار:\n يوجد به الاذكار مكتوبه ومسموعة والأذكار المسموعة يمكن تحميلها\n \n ملحوظة: \n التطبيق يعمل بالأنترنت ولكن أى شئ يتم فتحه بالأنترنت لأول مرة يمكن بعد ذلك فتحه من غير انترنت  " />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/facebook"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
+
+                android:src="@drawable/facebook" />
+
+            <ImageView
+                android:id="@+id/twitter"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:src="@drawable/twitter"
+                android:layout_marginStart="@dimen/_10sdp" />
+
+            <ImageView
+                android:id="@+id/linkedin"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:src="@drawable/linkedin"
+                android:layout_marginStart="@dimen/_10sdp" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</ScrollView>
+</layout>

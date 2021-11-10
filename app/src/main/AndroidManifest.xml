@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.elramady.moshafy">
+
+    <application
+        android:name="com.elramady.moshafy.FragmentPlayer.ApplicationClass"
+        android:allowBackup="true"
+        android:screenOrientation="portrait"
+        android:icon="@drawable/logo_moshafy"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@drawable/logo_moshafy"
+        android:theme="@style/Theme.Quany"
+        android:usesCleartextTraffic="true">
+        <activity android:name="com.elramady.moshafy.ui.AboutAppActivity"
+            android:screenOrientation="portrait"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="facebook.com" android:scheme="https"/>
+
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.elramady.moshafy.ui.AzkarTapActivity"
+            android:label="@string/title_activity_azkar_tap"
+            android:theme="@style/Theme.Quany.NoActionBar"
+            android:screenOrientation="portrait"
+
+            >
+
+        </activity>
+        <activity android:name=".ui.AzkraActivity" />
+        <activity android:name="com.elramady.moshafy.ui.TafseerTextActivity" />
+        <activity android:name="com.elramady.moshafy.ui.TafseerSurahsNamesActivity" />
+        <activity android:name="com.elramady.moshafy.ui.TafseerActivity" />
+        <activity android:name="com.elramady.moshafy.ui.MainActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.elramady.moshafy.FragmentPlayer.PlayerReciationActivity"
+            android:screenOrientation="portrait"
+
+            >
+        </activity>
+        <activity android:name="com.elramady.moshafy.ui.ReciationsActivity" android:screenOrientation="portrait" />
+        <activity android:name="com.elramady.moshafy.ui.RecitersActivity"   android:screenOrientation="portrait" />
+        <activity android:name="com.elramady.moshafy.ui.TextSurahActivity"  android:screenOrientation="portrait" />
+        <activity android:name="com.elramady.moshafy.ui.SurahsNamesActivity"  android:screenOrientation="portrait" />
+        <activity android:name="com.elramady.moshafy.ui.MoshfPdfActivity"  android:screenOrientation="portrait" />
+        <activity android:name="com.elramady.moshafy.ui.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name="com.elramady.moshafy.FragmentPlayer.NotificationReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="actionPrevious" />
+                <action android:name="actionNext" />
+                <action android:name="actionPlay" />
+                <action android:name="actionClose" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.elramady.moshafy.FragmentPlayer.MusicService"
+            android:enabled="true" />
+    </application>
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+
+</manifest>

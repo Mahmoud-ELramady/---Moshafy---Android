@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <data>
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/container_azkar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="2sp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="2dp"
+        >
+
+
+        <ImageView
+            android:id="@+id/title_azkar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_150sdp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_25sdp"
+            android:background="@drawable/azkar2"/>
+
+
+        <TextView
+            android:id="@+id/title_azkar_tx"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="أذكار الصباح والمساء"
+            android:textAlignment="viewEnd"
+            android:layout_marginEnd="@dimen/_9sdp"
+            android:layout_marginTop="@dimen/_24sdp"
+            android:layout_marginStart="@dimen/_9sdp"
+            android:layout_marginBottom="@dimen/_13sdp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_15sdp"
+            />
+
+
+
+
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

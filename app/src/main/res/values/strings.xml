@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">مٌصحفى</string>
+    <string name="elmoshf">المصحف</string>
+    <string name="quranEnglish">القرأن</string>
+    <string name="textProgress">انتظر يبدأ التحميل الان</string>
+    <string name="search">Search</string>
+    <string name="iconReciters">التلاوات</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_azkar_tap">AzkarTapActivity</string>
+    <string name="tab_text_1">الأذكار مكتوبة</string>
+    <string name="tab_text_2">الأذكار مسموعة</string>
+    <string name="tafseerIcon">تفسير القرأن</string>
+</resources>

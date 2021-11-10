@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#3F51B5</color>
+    <color name="purple_700">#303F9F</color>
+    <color name="teal_200">#3F51B5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#fff</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="colorNavigation">#303F9F</color>
+    <color name="color_number_aya">#E18806</color>
+
+
+    <color name="playerBackground">#C5CAE9</color>
+    <color name="mainBackground">#112e40</color>
+    <color name="textDefault">#4e4c62</color>
+    <color name="textOrange">#ff7775</color>
+    <color name="buttonBackground">#4e4c62</color>
+    <color name="nav_background">#0097A7</color>
+    <color name="nav_selected">#0083ff</color>
+
+
+</resources>
