@@ -146,7 +146,7 @@ Log.e("enter","enter1")
 
     fun getViewModel(id:Int):TextArabicViewModel{
         return ViewModelProvider(this,object: ViewModelProvider.Factory{
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(TextArabicViewModel::class.java)){
                     return TextArabicViewModel(repo,id) as T
                 }
@@ -161,7 +161,7 @@ Log.e("enter","enter1")
 
     fun getRoomViewModel(): RoomViewModel {
         return ViewModelProvider(this,object: ViewModelProvider.Factory{
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(RoomViewModel::class.java)){
                     return RoomViewModel(db) as T
                 }

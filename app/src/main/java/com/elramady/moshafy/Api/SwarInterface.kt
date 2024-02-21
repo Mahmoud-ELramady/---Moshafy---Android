@@ -41,8 +41,12 @@ interface SwarInterface {
     fun getSurahsText(@Path("surah_id") id:Int):Single<SurahText>
 
 
+
+
     @GET("api/_arabic.php")
     fun getRecitersNames(): Single<Reciters>
+
+
 
 
     @GET("reciters/{reciter_id}")
@@ -65,6 +69,11 @@ interface SwarInterface {
 
     @GET("Azkar.php")
     fun getAzkarListening():Single<List<AzkarListeningItem>>
+
+
+
+
+
 }
 
 

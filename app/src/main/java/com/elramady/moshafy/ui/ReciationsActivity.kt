@@ -1,8 +1,12 @@
 package com.elramady.moshafy.ui
 
+import android.content.Context
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -19,8 +23,10 @@ import com.elramady.moshafy.R
 import com.elramady.moshafy.room.DataBase
 import com.elramady.moshafy.room.RoomViewModel
 import com.elramady.moshafy.ViewModel.RecitionsViewModel
+import com.elramady.moshafy.ViewModel.SurhasNamesViewModel
 import com.elramady.moshafy.databinding.ActivityReciationsBinding
 import com.elramady.moshafy.repo.QuranRepositary
+import com.elramady.moshafy.vo.RecitersDetails.SurasData
 import java.lang.IllegalArgumentException
 
 class ReciationsActivity : AppCompatActivity() {
@@ -28,6 +34,7 @@ class ReciationsActivity : AppCompatActivity() {
     lateinit var repo: QuranRepositary
     lateinit var apiService: SwarInterface
     lateinit var viewModel: RecitionsViewModel
+    lateinit var viewModelSurhasNames: SurhasNamesViewModel
     val adapterReciation: ReciationsAdapter = ReciationsAdapter(this,this)
     lateinit var db: DataBase
     private lateinit var roomViewModel: RoomViewModel
@@ -36,6 +43,8 @@ class ReciationsActivity : AppCompatActivity() {
      var id:String=""
     companion object{
         var name_reciter:String=""
+        var server_reciter:String=""
+        var suras_reciter:String=""
         var shuffleBoolean:Boolean=false
         var repeatBoolean:Boolean=false
 
@@ -58,9 +67,11 @@ class ReciationsActivity : AppCompatActivity() {
         val binding: ActivityReciationsBinding = DataBindingUtil.setContentView(this,R.layout.activity_reciations)
         loadingDialog= LoadingDialog(this)
 
-         name_reciter=intent.getStringExtra("name_reciter").toString()
 
-        id= intent.getStringExtra("id_reciter").toString()
+         name_reciter=intent.getStringExtra("name_reciter").toString()
+         server_reciter=intent.getStringExtra("server_reciter").toString()
+         suras_reciter=intent.getStringExtra("suras_reciter").toString()
+         id= intent.getStringExtra("id_reciter").toString()
 
 
         val toolbar=binding.toolbarReciations
@@ -68,11 +79,14 @@ class ReciationsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         toolbar.title=name_reciter
 
+        loadingDialog.startLoadingDialog()
+
 
         apiService= SwarClient.getReciationsClient()
 
         repo= QuranRepositary(apiService)
         viewModel=getViewModel(id)
+        viewModelSurhasNames=getViewModelSurhasNames()
 
         db= DataBase.getInstance(this)
         roomViewModel=getRoomViewModel()
@@ -88,9 +102,83 @@ class ReciationsActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        checkRun()
+        checkInSurhasNamesIsExist()
+     //   checkRun()
+
     }
 
+
+    private fun checkInSurhasNamesIsExist(){
+
+        var pref:SharedPreferences=getSharedPreferences("geyPrefs", MODE_PRIVATE)
+
+        if(pref.getBoolean("firstRun",true)){
+           // loadingDialog.startLoadingDialog()
+            val manager: ConnectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val networkInfo:NetworkInfo? =manager.activeNetworkInfo
+            if (networkInfo!=null && networkInfo.isConnected){
+
+                viewModelSurhasNames.SurhasNamesList.observe(this, Observer {
+
+                    roomViewModel.insertSurahsNamesList(it)
+                    pref.edit().putBoolean("firstRun", false).apply()
+            //        loadingDialog.dismissDialog()
+                    getSurhasNamesWithIdsFromDataBase()
+
+                })
+
+            }else{
+                Toast.makeText(this,"تأكد من اتصالك بالانترنت",Toast.LENGTH_SHORT).show()
+                finish()
+            }
+
+        }else{
+
+            getSurhasNamesWithIdsFromDataBase()
+
+        }
+
+
+    }
+
+
+
+
+ private  fun getSurhasNamesWithIdsFromDataBase(){
+ // loadingDialog.startLoadingDialog()
+
+     Log.e("serverListtt", suras_reciter.toString())
+
+     val integerList = suras_reciter.split(",").map { it.toInt() }
+
+     val listOfSurhasData= mutableListOf<SurasData>()
+
+       roomViewModel.getSurahsNamesListByIds(integerList)
+
+     roomViewModel.surahsNamesListWithIdsDb.observe(this, Observer {
+         for (i in it){
+            val linkUrlOfSurah=getIdsForLinkOfSurah(i.number.toString())
+             listOfSurhasData.add(SurasData(i.number.toString(),i.name,
+                 "$server_reciter/$linkUrlOfSurah.mp3"
+             ))
+         }
+
+         adapterReciation.setList(listOfSurhasData)
+         loadingDialog.dismissDialog()
+
+     })
+   }
+
+
+  fun  getIdsForLinkOfSurah(id:String):String{
+      if (id.length==1){
+          return "00$id"
+      }else if (id.length==2){
+          return "0$id"
+      }else{
+          return id
+      }
+  }
 
 
      fun checkRun() {
@@ -100,7 +188,6 @@ class ReciationsActivity : AppCompatActivity() {
 
         roomViewModel.checkReciationInDb.observe(this, Observer {
             if (it){
-
 
                  roomViewModel.getReciationsNames(id)
                  roomViewModel.reciationsNames.observe(this, Observer {
@@ -137,7 +224,7 @@ class ReciationsActivity : AppCompatActivity() {
 
     fun getViewModel(id:String):RecitionsViewModel{
         return ViewModelProvider(this,object: ViewModelProvider.Factory{
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(RecitionsViewModel::class.java)){
                     return RecitionsViewModel(repo,id) as T
                 }
@@ -149,10 +236,38 @@ class ReciationsActivity : AppCompatActivity() {
 
     }
 
+//    private fun getViewModelSurhasNames():SurhasNamesViewModel{
+//        return ViewModelProvider(this,object: ViewModelProvider.Factory{
+//            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//                if (modelClass.isAssignableFrom(SurhasNamesViewModel::class.java)){
+//                    return SurhasNamesViewModel(repo) as T
+//                }
+//                throw IllegalArgumentException("Unknown View Model Class")
+//
+//            }
+//        })[SurhasNamesViewModel::class.java]
+//
+//
+//    }
+
+    @JvmName("getViewModel1")
+    fun getViewModelSurhasNames():SurhasNamesViewModel{
+        return ViewModelProvider(this,object: ViewModelProvider.Factory{
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                if (modelClass.isAssignableFrom(SurhasNamesViewModel::class.java)){
+                    return SurhasNamesViewModel(repo) as T
+                }
+                throw IllegalArgumentException("Unknown View Model Class")
+
+            }
+        })[SurhasNamesViewModel::class.java]
+
+    }
+
 
     fun getRoomViewModel(): RoomViewModel {
         return ViewModelProvider(this,object: ViewModelProvider.Factory{
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(RoomViewModel::class.java)){
                     return RoomViewModel(db) as T
                 }

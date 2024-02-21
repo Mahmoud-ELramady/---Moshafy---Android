@@ -57,6 +57,9 @@ class RecitersAdapter(val context:Context): RecyclerView.Adapter<RecitersAdapter
                     val intent= Intent(context, ReciationsActivity::class.java)
                     intent.putExtra("id_reciter",reciter.id)
                     intent.putExtra("name_reciter",reciter.name)
+                    intent.putExtra("server_reciter",reciter.server)
+                    intent.putExtra("suras_reciter",reciter.suras)
+                Log.e("recuriter", reciter.id + reciter.name)
                     context.startActivity(intent)
 
             }

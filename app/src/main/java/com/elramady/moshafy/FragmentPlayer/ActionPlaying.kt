@@ -1,7 +1,8 @@
 package com.elramady.moshafy.FragmentPlayer
 
-public interface ActionPlaying {
+ interface ActionPlaying {
     fun playPauseBtnClick()
     fun prevBtnClick()
     fun nextBtnClick()
+    fun closeBtnClick()
 }

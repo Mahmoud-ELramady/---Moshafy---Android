@@ -67,14 +67,13 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
 
         binding.reciterReciationNameTextView.isSelected=true
 
-        getIntenMethod()
+        getIntentMethod()
 
 
-        binding.reciterReciationNameTextView.text = nameReciter + " - " + nameSurah+"           "+nameReciter + " - " + nameSurah
+        binding.reciterReciationNameTextView.text =
+            "$nameReciter - $nameSurah           $nameReciter - $nameSurah"
 
         binding.downloadButton.setOnClickListener {
-
-
             alertDialog()
         }
 
@@ -129,6 +128,8 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
 
     }
 
+
+
     private fun alertDialog() {
         val alertDialog=AlertDialog.Builder(this)
         alertDialog.setTitle("تحميل التلاوة")
@@ -159,7 +160,7 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
     fun setPermission():Boolean{
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             return true
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(
                         arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
@@ -211,10 +212,9 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
     }
 
 
-    fun getIntenMethod() {
+    fun getIntentMethod() {
         reciationsFrag = ReciationsAdapter.reciationsList
         binding.playPauseLayout.setImageResource(R.drawable.pause_audio)
-
 
         val action="PLAY"
         val intent: Intent = Intent(this,MusicService::class.java)
@@ -539,6 +539,10 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
 
 
         }
+    }
+
+    override fun closeBtnClick() {
+        musicService!!.stop()
     }
 
     private fun getPosition(i: Int): Int {

@@ -148,8 +148,6 @@ checkRun()
                 adapter.setList(it)
             })
 
-
-
     }
 }
 
@@ -164,7 +162,7 @@ checkRun()
     @JvmName("getViewModel1")
     fun getViewModel():SurhasNamesViewModel{
         return ViewModelProvider(this,object: ViewModelProvider.Factory{
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(SurhasNamesViewModel::class.java)){
                     return SurhasNamesViewModel(repo) as T
                 }
@@ -179,7 +177,7 @@ checkRun()
 
     fun getRoomViewModel():RoomViewModel{
         return ViewModelProvider(this,object: ViewModelProvider.Factory{
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(RoomViewModel::class.java)){
                     return RoomViewModel(db) as T
                 }

@@ -64,9 +64,9 @@ class MainActivity : AppCompatActivity() {
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_SUBJECT, "My application name");
                var shareMessage:String= "\nقم بتحميل تطبيق مُصحفى يحتوى على القرأن كاملا وأكثر من 200 قارئ ومجموعة كبيره من التفاسير والأذكار حمل الأن\n\n";
-                shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +"\n\n";
+                shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + applicationContext.packageName +"\n\n";
                 shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
-                startActivity(Intent.createChooser(shareIntent, "choose one"));
+                startActivity(Intent.createChooser(shareIntent, "Share Moshafy مُصحفى"));
             } catch(e:Exception) {
                 //e.toString();
             }

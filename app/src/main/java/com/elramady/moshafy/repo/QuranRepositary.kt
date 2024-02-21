@@ -21,6 +21,9 @@ class QuranRepositary(private val apiService: SwarInterface) {
     }
 
 
+
+
+
     fun fetchSurhasText(compositeDisposable: CompositeDisposable,id:Int):LiveData<SurahText>{
         quranDataSource= QuranDataSource( apiService,compositeDisposable)
         quranDataSource.fetchSurahsText(id)

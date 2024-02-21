@@ -126,7 +126,7 @@ lateinit var binding:FragmentAzkarListeningBinding
     @JvmName("getViewModel1")
     fun getViewModel():AzkarListenViewModel{
         return ViewModelProvider(this,object: ViewModelProvider.Factory{
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(AzkarListenViewModel::class.java)){
                     return AzkarListenViewModel(repo) as T
                 }
@@ -141,7 +141,7 @@ lateinit var binding:FragmentAzkarListeningBinding
 
     fun getRoomViewModel():RoomViewModel{
         return ViewModelProvider(this,object: ViewModelProvider.Factory{
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(RoomViewModel::class.java)){
                     return RoomViewModel(db) as T
                 }

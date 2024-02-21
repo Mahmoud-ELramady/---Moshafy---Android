@@ -5,24 +5,20 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdk= 34
+    namespace = "com.elramady.moshafy"
 
     defaultConfig {
         applicationId "com.elramady.moshafy"
         minSdkVersion 23
-        targetSdkVersion 30
-        versionCode 1
+        targetSdkVersion 34
+        versionCode 2
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-
-
-//
 //
         }
-
-
 
         buildTypes {
             release {
@@ -31,6 +27,7 @@ android {
             }
 
         }
+
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_8
             targetCompatibility JavaVersion.VERSION_1_8
@@ -40,32 +37,35 @@ android {
         }
 
     buildFeatures {
-
         dataBinding = true
-
 //         for view binding:
          viewBinding = true
+
+        buildConfig true
+
     }
 
+}
 
-
-    }
+kapt {
+    correctErrorTypes = true
+}
 
 
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-implementation 'androidx.media:media:1.1.0'
+    implementation 'androidx.media:media:1.7.0'
 
     //retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -73,15 +73,12 @@ implementation 'androidx.media:media:1.1.0'
 
 
     //RX Java
-
-
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
-
-    implementation 'io.reactivex.rxjava3:rxjava:3.x.x'
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
 
 
     //LiveCycle
-    def lifecycle_version = "2.2.0"
+    def lifecycle_version = "2.7.0"
     def arch_version = "2.1.0"
 
     // ViewModel
@@ -92,7 +89,7 @@ implementation 'androidx.media:media:1.1.0'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
 
 
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
 
     //cardView
     implementation "androidx.cardview:cardview:1.0.0"
@@ -100,46 +97,43 @@ implementation 'androidx.media:media:1.1.0'
     // Rx java Adapter
     implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
 
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
 
 
-    implementation 'com.github.barteksc:android-pdf-viewer:3.2.0-beta.1'
-
-    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
-
-
+//   implementation 'com.github.barteksc:android-pdf-viewer:3.2.0-beta.1'
+//
+//    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 
 
     implementation 'com.itextpdf:itextpdf:5.5.13'
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
 
-
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-    def room_version = "2.2.6"
+    def room_version = "2.6.1"
 
     implementation "androidx.room:room-runtime:$room_version"
+
+    annotationProcessor "androidx.room:room-compiler:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
-
-
 
 
     implementation "androidx.room:room-rxjava2:$room_version"
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.10'
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-rc1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
+  //  ksp "androidx.room:room-compiler:2.6.1"
 
-
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1'
 
 }
 

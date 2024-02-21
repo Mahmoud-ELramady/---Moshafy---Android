@@ -1,6 +1,8 @@
 package com.elramady.moshafy.FragmentPlayer
 
+import android.annotation.SuppressLint
 import android.app.*
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.BitmapFactory
@@ -12,9 +14,13 @@ import android.os.Build
 import android.os.IBinder
 import android.support.v4.media.session.MediaSessionCompat
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.elramady.moshafy.FragmentPlayer.ApplicationClass.Companion.CHANNEL_ID_2
 import com.elramady.moshafy.R
 import com.elramady.moshafy.vo.RecitersDetails.SurasData
+import okhttp3.internal.notify
+
 
 class MusicService : Service() ,MediaPlayer.OnCompletionListener {
 
@@ -25,7 +31,7 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
     lateinit var sharedPreferences: SharedPreferences
 
     lateinit var mediaSessionCompat: MediaSessionCompat
-    lateinit var notification: Notification
+     var notification: Notification?=null
 
     lateinit var actionPlaying: ActionPlaying
     lateinit var url:String
@@ -60,6 +66,7 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action.equals("PLAY")){
             url= intent?.getStringExtra("urlService").toString()
@@ -101,7 +108,10 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
                 }
             }
             "Close"->{
+                Log.e("closeeeeeee","closeeeeee")
 
+              //  actionPlaying.playPauseBtnClick()
+                stopForeground(STOP_FOREGROUND_REMOVE)
             }
 
         }
@@ -208,7 +218,8 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
 
 
 
-    fun showNotification(playPauseBtn: Int,nameReciter:String,nameSurah:String) {
+    @SuppressLint("ForegroundServiceType")
+    fun showNotification(playPauseBtn: Int, nameReciter:String, nameSurah:String) {
 
         this.nameSurah=nameSurah
         this.nameReciter=nameReciter
@@ -227,8 +238,11 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
 
         val  notificationIntent_Close:Intent  = Intent(this, NotificationReceiver::class.java)
             .setAction(ApplicationClass.ACTION_CLOSE)
-       val closeIntent:PendingIntent  = PendingIntent.getBroadcast(this,
-        0, notificationIntent_Close, PendingIntent.FLAG_UPDATE_CURRENT);
+
+       val closePending:PendingIntent  = PendingIntent.getBroadcast(this,
+        0, notificationIntent_Close,
+           PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE);
+
 
 
 
@@ -251,6 +265,8 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
         val nextPending: PendingIntent = PendingIntent
                 .getBroadcast(this, 0, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
+
+
         Log.e("log2", "log2")
 
 
@@ -263,11 +279,12 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
                     .setContentText(nameReciter)
                     .setLargeIcon(icon)
                     .setColor(Color.WHITE)
-//                .setContentIntent(resultPendingIntent)
+                .setAutoCancel(true)
+              // .setContentIntent(resultPendingIntent)
                     .addAction(R.drawable.previous_audio, "Previous", prevPending)
                     .addAction(playPauseBtn, "Pause", pausePending)
                     .addAction(R.drawable.next_audio, "next", nextPending)
-//                     .addAction(R.drawable.ic_close,"Close",closeIntent)
+                     .addAction(R.drawable.ic_close,"Close",closePending)
                     .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
                             .setMediaSession(mediaSessionCompat.sessionToken))
                     .setOnlyAlertOnce(true)
@@ -287,7 +304,13 @@ fun callBack(actionPlaying: ActionPlaying){
     this.actionPlaying=actionPlaying
 }
 
-
+    fun getDismissIntent(notificationId: Int, context: Context?): PendingIntent? {
+        val intent = Intent(context, ApplicationClass::class.java)
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intent.putExtra(CHANNEL_ID_2, notificationId)
+        return PendingIntent.getActivity(context, 0, intent,
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+    }
 
 
 }

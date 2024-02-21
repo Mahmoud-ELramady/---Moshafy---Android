@@ -15,7 +15,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name="com.elramady.moshafy.ui.AboutAppActivity"
             android:screenOrientation="portrait"
-            >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -28,12 +28,9 @@
             android:name="com.elramady.moshafy.ui.AzkarTapActivity"
             android:label="@string/title_activity_azkar_tap"
             android:theme="@style/Theme.Quany.NoActionBar"
-            android:screenOrientation="portrait"
-
-            >
+            android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".ui.AzkraActivity" />
         <activity android:name="com.elramady.moshafy.ui.TafseerTextActivity" />
         <activity android:name="com.elramady.moshafy.ui.TafseerSurahsNamesActivity" />
         <activity android:name="com.elramady.moshafy.ui.TafseerActivity" />
@@ -48,10 +45,11 @@
         </activity>
         <activity android:name="com.elramady.moshafy.ui.ReciationsActivity" android:screenOrientation="portrait" />
         <activity android:name="com.elramady.moshafy.ui.RecitersActivity"   android:screenOrientation="portrait" />
-        <activity android:name="com.elramady.moshafy.ui.TextSurahActivity"  android:screenOrientation="portrait" />
+        <activity android:name="com.elramady.moshafy.ui.TextSurahActivity"  android:screenOrientation="fullSensor" />
         <activity android:name="com.elramady.moshafy.ui.SurahsNamesActivity"  android:screenOrientation="portrait" />
         <activity android:name="com.elramady.moshafy.ui.MoshfPdfActivity"  android:screenOrientation="portrait" />
-        <activity android:name="com.elramady.moshafy.ui.SplashActivity">
+        <activity android:name="com.elramady.moshafy.ui.SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -61,7 +59,8 @@
 
         <receiver
             android:name="com.elramady.moshafy.FragmentPlayer.NotificationReceiver"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="actionPrevious" />
                 <action android:name="actionNext" />
@@ -83,6 +82,5 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
 
 </manifest>

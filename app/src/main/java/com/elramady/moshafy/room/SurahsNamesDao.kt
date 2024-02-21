@@ -24,7 +24,14 @@ interface SurahsNamesDao {
     @Query("select * from surhas_names_table")
     fun getSurahsRoom(): Single<List<Data>>
 
+    @Query("select * from surhas_names_table where number IN (:idsList)")
+    fun getSurahsNamesWithIds(idsList:List<Int>): Single<List<Data>>
 
+    
+
+//    //check if table is exist
+//    @Query("SELECT EXISTS(SELECT * FROM surhas_names_table)")
+//    fun isExistSurhasNamesTable() : Observable<Boolean>
 
 
 

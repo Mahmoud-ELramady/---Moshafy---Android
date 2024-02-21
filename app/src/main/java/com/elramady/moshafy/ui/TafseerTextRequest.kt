@@ -16,7 +16,7 @@ class TafseerTextRequest
 (val repositary: QuranRepositary,val tafseerId:Int,val surahNumber:Int,val ayahNumber:Int): ViewModelProvider.Factory {
 
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TafseerTextViewModel::class.java)){
             return TafseerTextViewModel(repositary,tafseerId,surahNumber,ayahNumber) as T
         }

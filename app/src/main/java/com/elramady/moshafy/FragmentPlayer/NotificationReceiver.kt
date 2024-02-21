@@ -15,7 +15,7 @@ class NotificationReceiver: BroadcastReceiver() {
         val serviceIntent:Intent=Intent(context,MusicService::class.java)
         if (actionName!=null){
             Log.e("recevier","Reccevier")
-            Log.e("action",actionName)
+            Log.e("action",actionName+"jjj")
 
             when(actionName){
                 ACTION_PLAY -> {

@@ -109,7 +109,7 @@ class PlayerScreenMotionLayout(
   }
 
   private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-    override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+    override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
       transitionToEnd()
       return false
     }

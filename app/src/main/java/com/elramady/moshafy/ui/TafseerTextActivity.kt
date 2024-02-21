@@ -238,7 +238,7 @@ fun getDialog(){
 
     fun getViewModel(id:Int):TextArabicViewModel{
         return ViewModelProvider(this,object: ViewModelProvider.Factory{
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(TextArabicViewModel::class.java)){
                     return TextArabicViewModel(repo,id) as T
                 }
@@ -252,7 +252,7 @@ fun getDialog(){
 
     fun getViewModelAyah(tafseerId:Int,surahNumber:Int,ayahNumber:Int):TafseerTextViewModel{
         return ViewModelProvider(this,object: ViewModelProvider.Factory{
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(TafseerTextViewModel::class.java)){
                     return TafseerTextViewModel(repo,tafseerId,surahNumber,ayahNumber) as T
                 }
@@ -266,7 +266,7 @@ fun getDialog(){
 
     fun getRoomViewModel(): RoomViewModel {
         return ViewModelProvider(this,object: ViewModelProvider.Factory{
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(RoomViewModel::class.java)){
                     return RoomViewModel(db) as T
                 }

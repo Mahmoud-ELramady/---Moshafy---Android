@@ -42,6 +42,11 @@ class RoomViewModel(var db:DataBase):ViewModel() {
 
     val azkarListeningListDb=MutableLiveData<List<AzkarListeningItem>>()
 
+    //get list OF surahsNames with specific Ids
+    val surahsNamesListWithIdsDb=MutableLiveData<List<Data>>()
+
+
+
 
     fun insertSurahsNamesList(listNamesDb:List<Data>){
 
@@ -417,7 +422,20 @@ class RoomViewModel(var db:DataBase):ViewModel() {
 
 
 
+    fun getSurahsNamesListByIds(idsSurhasList:List<Int>){
+        db.surahsDao.getSurahsNamesWithIds(idsSurhasList)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                surahsNamesListWithIdsDb.postValue(it)
+                Log.e("getSurahs","getSurahs")
+            },{
 
+            }
+            ).let {
+                compositeDisposable.add(it)
+            }
+    }
 
 
 
@@ -428,6 +446,7 @@ class RoomViewModel(var db:DataBase):ViewModel() {
         compositeDisposable.dispose()
 
     }
+
 
 
 

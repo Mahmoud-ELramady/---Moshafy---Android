@@ -106,7 +106,7 @@ class TafseerActivity : AppCompatActivity() {
     @JvmName("getViewModel1")
     fun getViewModel():TafseersNamesViewModel{
         return ViewModelProvider(this,object: ViewModelProvider.Factory{
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(TafseersNamesViewModel::class.java)){
                     return TafseersNamesViewModel(repo) as T
                 }
@@ -121,7 +121,7 @@ class TafseerActivity : AppCompatActivity() {
 
     fun getRoomViewModel():RoomViewModel{
         return ViewModelProvider(this,object: ViewModelProvider.Factory{
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(RoomViewModel::class.java)){
                     return RoomViewModel(db) as T
                 }
