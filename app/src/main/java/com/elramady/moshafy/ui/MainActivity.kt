@@ -16,6 +16,11 @@ class MainActivity : AppCompatActivity() {
         val binding: ActivityMainBinding=DataBindingUtil.setContentView(this,R.layout.activity_main)
 
 
+        binding.cardQuranFull.setOnClickListener {
+            val intent=Intent(this, QuranPdfActivity::class.java)
+            this.startActivity(intent)
+        }
+
         binding.cardQuranTranslate.setOnClickListener {
             val intent=Intent(this, SurahsNamesActivity::class.java)
             this.startActivity(intent)

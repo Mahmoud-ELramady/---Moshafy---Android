@@ -71,7 +71,9 @@ class RoomViewModel(var db:DataBase):ViewModel() {
     }
 
     fun getSurahsNamesList(){
-        db.surahsDao.getSurahsRoom()
+
+        try {
+            db.surahsDao.getSurahsRoom()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -83,6 +85,12 @@ class RoomViewModel(var db:DataBase):ViewModel() {
                 ).let {
                     compositeDisposable.add(it)
                 }
+        }catch (e:Exception){
+            Log.e("errorLogggg3",e.message.toString())
+
+        }
+
+
     }
 
 

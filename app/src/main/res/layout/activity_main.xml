@@ -27,7 +27,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="@dimen/_25sdp"
-            android:layout_gravity="start|bottom"
             android:background="@color/purple_500"
             android:focusable="true"
             android:clickable="true"
@@ -249,6 +248,43 @@
 
                     </com.google.android.material.card.MaterialCardView>
 
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/card_quran_full"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:clickable="true"
+                        app:cardElevation="@dimen/_6sdp"
+                        app:cardCornerRadius="@dimen/_12sdp"
+                        android:layout_margin="@dimen/_12sdp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:padding="@dimen/_18sdp"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="@dimen/_50sdp"
+                                android:layout_height="@dimen/_50sdp"
+                                android:src="@drawable/quran"
+                                />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:textAlignment="viewEnd"
+                                android:text="القرأن كاملا"
+                                android:textColor="#000"
+                                android:textSize="@dimen/_19sdp" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
 
 
                     <com.google.android.material.card.MaterialCardView
@@ -288,6 +324,10 @@
                         </LinearLayout>
 
                     </com.google.android.material.card.MaterialCardView>
+
+
+
+
 
                 </GridLayout>
 

@@ -7,6 +7,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -143,9 +144,18 @@ checkRun()
 
     }else{
 
+        try {
             roomViewModel.getSurahsNamesList()
+            Log.e("errorLogggg4","4444")
+
+
+        }catch (e:Exception){
+            Log.e("errorLogggg1",e.message.toString())
+        }
             roomViewModel.surahsNamesListDb.observe(this, Observer {
                 adapter.setList(it)
+                Log.e("errorLogggg2",it.toString())
+
             })
 
     }

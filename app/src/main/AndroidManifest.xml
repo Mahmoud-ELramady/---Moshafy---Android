@@ -3,52 +3,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.elramady.moshafy">
 
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
-        android:name="com.elramady.moshafy.FragmentPlayer.ApplicationClass"
+        android:name=".FragmentPlayer.ApplicationClass"
         android:allowBackup="true"
-        android:screenOrientation="portrait"
         android:icon="@drawable/logo_moshafy"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/logo_moshafy"
+        android:screenOrientation="portrait"
         android:theme="@style/Theme.Quany"
         android:usesCleartextTraffic="true">
-        <activity android:name="com.elramady.moshafy.ui.AboutAppActivity"
-            android:screenOrientation="portrait"
-            android:exported="true">
+        <activity
+            android:name=".ui.QuranPdfActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.AboutAppActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="facebook.com" android:scheme="https"/>
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="facebook.com"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.elramady.moshafy.ui.AzkarTapActivity"
+            android:name=".ui.AzkarTapActivity"
             android:label="@string/title_activity_azkar_tap"
-            android:theme="@style/Theme.Quany.NoActionBar"
-            android:screenOrientation="portrait">
-
-        </activity>
-        <activity android:name="com.elramady.moshafy.ui.TafseerTextActivity" />
-        <activity android:name="com.elramady.moshafy.ui.TafseerSurahsNamesActivity" />
-        <activity android:name="com.elramady.moshafy.ui.TafseerActivity" />
-        <activity android:name="com.elramady.moshafy.ui.MainActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name="com.elramady.moshafy.FragmentPlayer.PlayerReciationActivity"
             android:screenOrientation="portrait"
-
-            >
-        </activity>
-        <activity android:name="com.elramady.moshafy.ui.ReciationsActivity" android:screenOrientation="portrait" />
-        <activity android:name="com.elramady.moshafy.ui.RecitersActivity"   android:screenOrientation="portrait" />
-        <activity android:name="com.elramady.moshafy.ui.TextSurahActivity"  android:screenOrientation="fullSensor" />
-        <activity android:name="com.elramady.moshafy.ui.SurahsNamesActivity"  android:screenOrientation="portrait" />
-        <activity android:name="com.elramady.moshafy.ui.MoshfPdfActivity"  android:screenOrientation="portrait" />
-        <activity android:name="com.elramady.moshafy.ui.SplashActivity"
+            android:theme="@style/Theme.Quany.NoActionBar"></activity>
+        <activity android:name=".ui.TafseerTextActivity" />
+        <activity android:name=".ui.TafseerSurahsNamesActivity" />
+        <activity android:name=".ui.TafseerActivity" />
+        <activity
+            android:name=".ui.MainActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".FragmentPlayer.PlayerReciationActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.ReciationsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.RecitersActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.TextSurahActivity"
+            android:screenOrientation="fullSensor" />
+        <activity
+            android:name=".ui.SurahsNamesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.MoshfPdfActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -58,7 +80,7 @@
         </activity>
 
         <receiver
-            android:name="com.elramady.moshafy.FragmentPlayer.NotificationReceiver"
+            android:name=".FragmentPlayer.NotificationReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -70,17 +92,8 @@
         </receiver>
 
         <service
-            android:name="com.elramady.moshafy.FragmentPlayer.MusicService"
+            android:name=".FragmentPlayer.MusicService"
             android:enabled="true" />
     </application>
-
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28"
-        tools:ignore="ScopedStorage" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>
