@@ -30,6 +30,7 @@
             android:background="@color/purple_500"
             android:focusable="true"
             android:clickable="true"
+            app:tint="@color/white"
             android:layout_marginBottom="@dimen/_20sdp"
             android:src="@drawable/share_app"
             />
@@ -123,7 +124,7 @@
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:textAlignment="viewEnd"
                                 android:textColor="#000"
-                                android:textSize="@dimen/_19sdp" />
+                                android:textSize="@dimen/_15sdp" />
 
                         </LinearLayout>
 
@@ -164,7 +165,8 @@
                                 android:textAlignment="viewEnd"
                                 android:text="@string/quranEnglish"
                                 android:textColor="#000"
-                                android:textSize="@dimen/_19sdp" />
+                                android:textSize="@dimen/_15sdp"
+                                />
 
                         </LinearLayout>
 
@@ -203,7 +205,7 @@
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:textAlignment="viewEnd"
                                 android:textColor="#000"
-                                android:textSize="@dimen/_19sdp" />
+                                android:textSize="@dimen/_15sdp" />
 
                         </LinearLayout>
 
@@ -242,7 +244,7 @@
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:textAlignment="viewEnd"
                                 android:textColor="#000"
-                                android:textSize="@dimen/_19sdp" />
+                                android:textSize="@dimen/_15sdp" />
 
                         </LinearLayout>
 
@@ -269,7 +271,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_50sdp"
                                 android:layout_height="@dimen/_50sdp"
-                                android:src="@drawable/quran"
+                                android:src="@drawable/icon_sebha"
                                 />
 
                             <TextView
@@ -278,9 +280,9 @@
                                 android:layout_centerVertical="true"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:textAlignment="viewEnd"
-                                android:text="القرأن كاملا"
+                                android:text="السبحة"
                                 android:textColor="#000"
-                                android:textSize="@dimen/_19sdp" />
+                                android:textSize="@dimen/_15sdp" />
 
                         </LinearLayout>
 
@@ -319,7 +321,7 @@
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:textAlignment="viewEnd"
                                 android:textColor="#000"
-                                android:textSize="@dimen/_19sdp" />
+                                android:textSize="@dimen/_15sdp" />
 
                         </LinearLayout>
 

@@ -21,6 +21,7 @@ import com.elramady.moshafy.vo.sebha.SebhaData
 //@Database(entities = [Data::class,SurahText::class,Reciter::class,RecitersDetails::class
 //    ,TafseersNamesItem::class,TafseerText::class, AzkarListeningItem::class,SebhaData::class]
 //    ,version = 2,)
+
 @Database(entities = [Data::class,SurahText::class,Reciter::class,RecitersDetails::class
     ,TafseersNamesItem::class,TafseerText::class, AzkarListeningItem::class,SebhaData::class]
     ,version = 2, autoMigrations = [AutoMigration(from = 1, to = 2)])
@@ -28,6 +29,7 @@ import com.elramady.moshafy.vo.sebha.SebhaData
 abstract class DataBase :RoomDatabase() {
 
     abstract val surahsDao : SurahsNamesDao
+    abstract val sebhaDao : SebhaDao
 
     companion object{
 
@@ -43,7 +45,7 @@ abstract class DataBase :RoomDatabase() {
                         ,DataBase::class.java
                         ,"surahs_data_base")
 
-//                        .fallbackToDestructiveMigration()
+                      // .fallbackToDestructiveMigration()
                         .build()
                 }
                 return instance

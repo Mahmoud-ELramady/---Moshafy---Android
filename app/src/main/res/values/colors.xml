@@ -5,7 +5,7 @@
     <color name="purple_700">#303F9F</color>
     <color name="teal_200">#3F51B5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#fff</color>
+    <color name="black">#000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="colorNavigation">#303F9F</color>
     <color name="color_number_aya">#E18806</color>

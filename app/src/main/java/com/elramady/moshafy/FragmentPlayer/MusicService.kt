@@ -17,6 +17,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.elramady.moshafy.FragmentPlayer.ApplicationClass.Companion.CHANNEL_ID_2
+import com.elramady.moshafy.FragmentPlayer.PlayerReciationActivity.Companion.isDestroy
 import com.elramady.moshafy.R
 import com.elramady.moshafy.vo.RecitersDetails.SurasData
 import okhttp3.internal.notify
@@ -38,6 +39,7 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
 
     lateinit var nameReciter: String
     lateinit var nameSurah: String
+    lateinit var pref:SharedPreferences
 
 
     companion object{
@@ -62,6 +64,8 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
     override fun onCreate() {
         super.onCreate()
         mediaSessionCompat = MediaSessionCompat(this, "My Audio")
+        Log.e("closeee","new Service")
+        pref=getSharedPreferences("isPlayingDestroy", MODE_PRIVATE)
 
     }
 
@@ -109,9 +113,22 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
             }
             "Close"->{
                 Log.e("closeeeeeee","closeeeeee")
+            val   destroy=  pref.getBoolean("isPlayingDestroy",true)
+                Log.e("closeeeeeee",destroy.toString())
 
-              //  actionPlaying.playPauseBtnClick()
-                stopForeground(STOP_FOREGROUND_REMOVE)
+                if (destroy){
+                    Log.e("closeeeeeee","destroy")
+                    actionPlaying.closeBtnClick()
+                    stopForeground(STOP_FOREGROUND_REMOVE)
+
+                }else{
+                    Log.e("closeeeeeee","non destroy")
+
+                    stopForeground(STOP_FOREGROUND_REMOVE)
+
+                }
+
+               // actionPlaying
             }
 
         }

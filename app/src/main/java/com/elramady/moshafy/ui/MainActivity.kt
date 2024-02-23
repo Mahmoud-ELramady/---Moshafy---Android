@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.cardQuranFull.setOnClickListener {
-            val intent=Intent(this, QuranPdfActivity::class.java)
+            val intent=Intent(this, SebhaActivity::class.java)
             this.startActivity(intent)
         }
 

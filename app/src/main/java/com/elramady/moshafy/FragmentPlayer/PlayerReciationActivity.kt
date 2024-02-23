@@ -39,14 +39,16 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
     lateinit var playThread: Thread
     lateinit var prevThread: Thread
     lateinit var nextThread: Thread
+    lateinit var closeThread: Thread
     lateinit var playFirstThread: Thread
      var musicService: MusicService?=null
     lateinit var fragPlayNow:PlayingNowFragment
 
-
+lateinit var pref:SharedPreferences
     companion object{
         val pathName="Qurany.mp3"
         val REQUESTED_CODE:Int=1
+        var isDestroy=false
 
     }
 
@@ -55,6 +57,9 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
          binding = DataBindingUtil.setContentView(this,R.layout.activity_player_reciation)
 
         loadingDialog= LoadingDialog(this)
+
+
+
 
         fragPlayNow= PlayingNowFragment()
         fragPlayNow.setActionFrag(this)
@@ -314,6 +319,7 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
         playThreadBtn()
         prevThreadBtn()
         nextThreadBtn()
+      //  closeBtnClick()
         super.onResume()
 
     }
@@ -329,6 +335,20 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
         playThread.start()
 
     }
+
+    override fun onStart() {
+        super.onStart()
+        pref=getSharedPreferences("isPlayingDestroy", MODE_PRIVATE)
+        pref.edit().putBoolean("isPlayingDestroy", false).apply()
+    }
+    override fun onDestroy() {
+        pref.edit().putBoolean("isPlayingDestroy", true).apply()
+
+        super.onDestroy()
+        Log.e("destroyMusic","destroyMusic")
+    }
+
+
     override fun playPauseBtnClick() {
         if (musicService!!.isPlaying()){
 
@@ -383,6 +403,9 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
         prevThread.start()
 
     }
+
+
+
     override fun prevBtnClick() {
 //        loadingDialog.startLoadingDialog()
         reciationsFrag=ReciationsAdapter.reciationsList
@@ -458,6 +481,22 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
         }
 
 //        loadingDialog.dismissDialog()
+    }
+
+    override fun closeBtnClick() {
+        musicService!!.stop()
+        binding.playPauseLayout.setImageResource(R.drawable.play_audio)
+
+        //   musicService!!.showNotification(R.drawable.play_noti,nameReciter,nameSurah)
+//        closeThread=Thread(Runnable {
+//            if (musicService!!.isPlaying()){
+//
+//            }else{
+//
+//            }
+//
+//        })
+
     }
 
 
@@ -541,9 +580,7 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
         }
     }
 
-    override fun closeBtnClick() {
-        musicService!!.stop()
-    }
+
 
     private fun getPosition(i: Int): Int {
         val random: Random = Random()

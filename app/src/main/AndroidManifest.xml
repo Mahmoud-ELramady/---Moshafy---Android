@@ -20,8 +20,11 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/logo_moshafy"
         android:screenOrientation="portrait"
-        android:theme="@style/Theme.Quany"
+        android:theme="@style/Theme.Moshafy"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ui.SebhaActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.QuranPdfActivity"
             android:exported="false" />
@@ -44,16 +47,16 @@
             android:name=".ui.AzkarTapActivity"
             android:label="@string/title_activity_azkar_tap"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Quany.NoActionBar"></activity>
+            android:theme="@style/Theme.Quany.NoActionBar" />
         <activity android:name=".ui.TafseerTextActivity" />
         <activity android:name=".ui.TafseerSurahsNamesActivity" />
         <activity android:name=".ui.TafseerActivity" />
         <activity
             android:name=".ui.MainActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".FragmentPlayer.PlayerReciationActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.ReciationsActivity"
             android:screenOrientation="portrait" />

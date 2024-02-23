@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.SebhaActivity">
+
+
+    <ImageView
+        android:id="@+id/image_sebha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/image_sebha"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:adjustViewBounds="true"
+        />
+
+    
+    <Spinner
+        android:id="@+id/spinner_sebha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/image_sebha"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginStart="@dimen/_30sdp"
+        android:layout_marginEnd="@dimen/_30sdp"
+        android:background="@drawable/background_drop_menu"
+        android:hint="اختار الصيغة"
+        android:padding="@dimen/_10sdp"
+
+        />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/spinner_sebha"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginHorizontal="@dimen/_15sdp"
+
+        >
+
+        <TextView
+            android:id="@+id/text_count_sebha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="25"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_25sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_delete_sebha_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icon_refresh"
+            android:backgroundTint="#CF1E1E"
+            app:tint="@color/white"
+            app:fabSize="mini"
+            />
+
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_count_sebha"
+
+            android:layout_marginTop="@dimen/_13sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+
+            <TextView
+                android:id="@+id/tv_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="الإجمالى:    "
+                android:textSize="@dimen/_15sdp"
+                android:textColor="@color/purple_500"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/tv_total_count_sebha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tv_total"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="50"
+                android:textSize="@dimen/_18sdp"
+                android:textColor="@color/black"
+                />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_delete_sebha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:srcCompat="@drawable/icon_delete"
+                android:backgroundTint="#CF1E1E"
+                app:tint="@color/white"
+                app:fabSize="mini"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_click_sebha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_count"
+        android:layout_marginTop="@dimen/_12sdp"
+        >
+
+        <ImageView
+            android:id="@+id/image_circle_sebha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/back_ripple_effect"
+            android:adjustViewBounds="true"
+            android:clipToOutline="true"
+
+            tools:targetApi="s" />
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="الله لا اله الا انت سبحانك انى كنت من الظالمين"
+            android:padding="@dimen/_15sdp"
+            android:gravity="center"
+            android:elevation="6dp"
+            android:textSize="18sp"
+            android:textColor="#fff"
+            android:layout_margin="@dimen/_8sdp"
+            app:layout_constraintStart_toStartOf="@+id/image_circle_sebha"
+            app:layout_constraintEnd_toEndOf="@+id/image_circle_sebha"
+            app:layout_constraintTop_toTopOf="@+id/image_circle_sebha"
+            app:layout_constraintBottom_toBottomOf="@+id/image_circle_sebha"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_set_zero"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="#CF1E1E"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:cornerRadius="@dimen/_10sdp"
+        android:text="@string/zero_for_sebha"
+        android:padding="@dimen/_10sdp"
+        android:textSize="@dimen/_15sdp"
+        app:layout_constraintBottom_toTopOf="@+id/fab_add_sebha"
+
+        />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_sebha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="@dimen/_18sdp"
+        android:layout_marginEnd="@dimen/_20sdp"
+        android:src="@drawable/icon_add"
+        app:tint="@color/white"
+        />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
