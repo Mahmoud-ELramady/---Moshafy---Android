@@ -29,11 +29,7 @@ class SebhaViewModel(val repository: SebhaRepository):ViewModel() {
 
     fun getAllSebha()=repository.getAllSebha()
 
-    fun getSumNumberOfAllSebha(){
-        viewModelScope.launch{
-            _getSumNumberOfAllSebhaLivaData.postValue(repository.getSumNumberOfAllSebha().value)
-        }
-    }
+    fun getSumNumberOfAllSebha()=repository.getSumNumberOfAllSebha()
 
     fun insertSebha(sebha: SebhaData){
         viewModelScope.launch {
@@ -41,13 +37,13 @@ class SebhaViewModel(val repository: SebhaRepository):ViewModel() {
         }
     }
 
-    fun updateSebha(countSebha:Int,idSebha:Int){
+    fun updateSebha(countSebha:Int,idSebha:Int?){
         viewModelScope.launch {
             repository.updateSebha(countSebha,idSebha)
         }
     }
 
-    fun deleteCountOfSebha(idSebha:Int){
+    fun deleteCountOfSebha(idSebha:Int?){
         viewModelScope.launch {
             repository.deleteCountOfSebha(idSebha)
         }
@@ -59,7 +55,7 @@ class SebhaViewModel(val repository: SebhaRepository):ViewModel() {
         }
     }
 
-    fun deleteSebha(idSebha:Int){
+    fun deleteSebha(idSebha:Int?){
         viewModelScope.launch {
             repository.deleteSebha(idSebha)
         }

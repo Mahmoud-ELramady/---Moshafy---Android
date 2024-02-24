@@ -30,9 +30,7 @@
         android:layout_marginStart="@dimen/_30sdp"
         android:layout_marginEnd="@dimen/_30sdp"
         android:background="@drawable/background_drop_menu"
-        android:hint="اختار الصيغة"
         android:padding="@dimen/_10sdp"
-
         />
 
 
@@ -159,9 +157,9 @@
 
 
         <TextView
+            android:id="@+id/tv_title_sebha"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="الله لا اله الا انت سبحانك انى كنت من الظالمين"
             android:padding="@dimen/_15sdp"
             android:gravity="center"
             android:elevation="6dp"

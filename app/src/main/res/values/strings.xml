@@ -14,4 +14,15 @@
     <string name="tab_text_2">الأذكار مسموعة</string>
     <string name="tafseerIcon">تفسير القرأن</string>
     <string name="zero_for_sebha">تصفير كل العدادات</string>
+    <string name="start_sebha">ابدأ التسبيح</string>
+    <string name="add_sebha_to_start_sebha">ضيف سبحة لبدأ التسبيح</string>
+    <string name="sure">تأكيد</string>
+    <string name="cancel">الغاء</string>
+    <string name="are_you_sure_to_delete_sebha">هل انت متأكد من مسح السبحة؟</string>
+    <string name="are_you_sure_to_set_sum_zero">هل انت متأكد من تصفير كل العدادات؟</string>
+
+
+    <string-array name="spinner_string_array">
+        <item>اختار الصيغة</item>
+    </string-array>
 </resources>

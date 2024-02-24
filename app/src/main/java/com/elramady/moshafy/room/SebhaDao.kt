@@ -24,23 +24,23 @@ interface SebhaDao {
    @Insert(onConflict = OnConflictStrategy.REPLACE)
    suspend fun insertSebha(sebha:SebhaData):Long
 
-    @Query("select * from sebha_table")
-    fun getAllSebha(): LiveData<List<SebhaData>>
+    @Query("select * from sebha_table ORDER BY id DESC")
+    fun getAllSebha(): LiveData<List<SebhaData>?>
 
     @Query("UPDATE sebha_table SET numberOfSebha = :countSebha WHERE id = :idSebha")
-   suspend fun updateSebha(countSebha:Int,idSebha:Int)
+   suspend fun updateSebha(countSebha:Int,idSebha:Int?)
 
     @Query("UPDATE sebha_table SET numberOfSebha = 0 WHERE id = :idSebha")
-    suspend fun deleteCountOfSebha(idSebha:Int)
+    suspend fun deleteCountOfSebha(idSebha:Int?)
 
     @Query("UPDATE sebha_table SET numberOfSebha = 0")
     suspend fun deleteAllCountOfSebha()
 
     @Query("DELETE FROM sebha_table WHERE id = :idSebha")
-    suspend  fun deleteSebha(idSebha:Int)
+    suspend  fun deleteSebha(idSebha:Int?)
 
     @Query("SELECT SUM(numberOfSebha) FROM sebha_table")
-    fun _getSumNumberOfAllSebha():LiveData<Int>
+    fun getSumNumberOfAllSebha():LiveData<Int>
 
 
 }

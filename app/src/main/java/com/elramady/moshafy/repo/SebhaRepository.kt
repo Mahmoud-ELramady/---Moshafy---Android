@@ -12,14 +12,14 @@ class SebhaRepository(private val db:DataBase) {
 
     fun getAllSebha()=db.sebhaDao.getAllSebha()
 
-    suspend fun updateSebha(countSebha:Int,idSebha:Int)=db.sebhaDao.updateSebha(countSebha,idSebha)
+    suspend fun updateSebha(countSebha:Int,idSebha:Int?)=db.sebhaDao.updateSebha(countSebha,idSebha)
 
-    suspend fun deleteCountOfSebha(idSebha:Int)=db.sebhaDao.deleteCountOfSebha(idSebha)
+    suspend fun deleteCountOfSebha(idSebha:Int?)=db.sebhaDao.deleteCountOfSebha(idSebha)
 
     suspend fun deleteAllCountOfSebha()=db.sebhaDao.deleteAllCountOfSebha()
 
-    suspend  fun deleteSebha(idSebha:Int)=db.sebhaDao.deleteSebha(idSebha)
+    suspend  fun deleteSebha(idSebha:Int?)=db.sebhaDao.deleteSebha(idSebha)
 
-    fun getSumNumberOfAllSebha()=db.sebhaDao._getSumNumberOfAllSebha()
+    fun getSumNumberOfAllSebha()=db.sebhaDao.getSumNumberOfAllSebha()
 
 }

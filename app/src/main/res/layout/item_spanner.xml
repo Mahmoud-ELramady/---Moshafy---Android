@@ -2,10 +2,9 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="20sp"
-    android:textStyle="bold"
-    android:padding="@dimen/_5sdp"
-    android:text="متالانتلنتالالاتوامامم"
+    android:textSize="15sp"
+    android:text="اختار الصيغة"
     android:textColor="@color/black"
+
     android:drawableLeft="@drawable/icon_arrow_drop_down"
     />
