@@ -45,6 +45,7 @@ class RoomViewModel(var db:DataBase):ViewModel() {
     //get list OF surahsNames with specific Ids
     val surahsNamesListWithIdsDb=MutableLiveData<List<Data>>()
 
+    val sureInsertSurahsNames=MutableLiveData<Boolean>()
 
 
 
@@ -60,6 +61,7 @@ class RoomViewModel(var db:DataBase):ViewModel() {
 
                     override fun onComplete() {
                         Log.e("doneInsert","done Insert")
+                        sureInsertSurahsNames.postValue(true)
                     }
 
                     override fun onError(e: Throwable) {

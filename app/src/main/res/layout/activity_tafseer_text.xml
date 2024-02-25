@@ -129,7 +129,8 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:textAlignment="viewEnd"
-                            android:textSize="18sp" />
+                            style="@style/TextStyle.Quran"
+                            />
 
                     </LinearLayout>
 

@@ -33,7 +33,7 @@
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
-            android:text="تطبيق مُصحفى هو تطبيق دينى يحتوى على أربع أقسام رئيسية:\n\n القرأن:\n وهو يحتوى على القرأن وترجمته بالإنجليزية عند اختيار السوره المراد قرأتها\n\n التلاوات:\n وهو يحتوى على أكثر من 200 قارئ بمختلف التلاوات وإمكانية البحث \n بأسم القارئ أو التلاوة ثم اختيار السورة المراد سماعها مع امكانية تحميل السورة من زر أسفل يمين الشاشه \n\n تفسير القرأن:\n يحتوى على مجموعة كبيره من التفاسير منها العربية والإنجليزية مع اختيار السوره ثم الضغط على الأية المراد تفسيرها\n\n الأذكار:\n يوجد به الاذكار مكتوبه ومسموعة والأذكار المسموعة يمكن تحميلها\n \n ملحوظة: \n التطبيق يعمل بالأنترنت ولكن أى شئ يتم فتحه بالأنترنت لأول مرة يمكن بعد ذلك فتحه من غير انترنت  " />
+            android:text="@string/text_about_app" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,6 +42,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_13sdp"
             android:gravity="center">
 
             <ImageView

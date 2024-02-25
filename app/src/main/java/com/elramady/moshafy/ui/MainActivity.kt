@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         val binding: ActivityMainBinding=DataBindingUtil.setContentView(this,R.layout.activity_main)
 
 
-        binding.cardQuranFull.setOnClickListener {
+        binding.cardSebha.setOnClickListener {
             val intent=Intent(this, SebhaActivity::class.java)
             this.startActivity(intent)
         }

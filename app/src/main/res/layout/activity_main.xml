@@ -250,8 +250,10 @@
 
                     </com.google.android.material.card.MaterialCardView>
 
+
+
                     <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/card_quran_full"
+                        android:id="@+id/card_sebha"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
@@ -326,6 +328,11 @@
                         </LinearLayout>
 
                     </com.google.android.material.card.MaterialCardView>
+
+
+
+                 
+
 
 
 

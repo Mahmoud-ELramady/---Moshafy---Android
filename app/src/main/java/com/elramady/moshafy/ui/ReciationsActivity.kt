@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.elramady.moshafy.Adapters.ReciationsAdapter
@@ -27,6 +28,8 @@ import com.elramady.moshafy.ViewModel.SurhasNamesViewModel
 import com.elramady.moshafy.databinding.ActivityReciationsBinding
 import com.elramady.moshafy.repo.QuranRepositary
 import com.elramady.moshafy.vo.RecitersDetails.SurasData
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.lang.IllegalArgumentException
 
 class ReciationsActivity : AppCompatActivity() {
@@ -82,7 +85,7 @@ class ReciationsActivity : AppCompatActivity() {
         loadingDialog.startLoadingDialog()
 
 
-        apiService= SwarClient.getReciationsClient()
+        apiService= SwarClient.getSwarClient()
 
         repo= QuranRepositary(apiService)
         viewModel=getViewModel(id)
@@ -114,6 +117,8 @@ class ReciationsActivity : AppCompatActivity() {
 
         if(pref.getBoolean("firstRun",true)){
            // loadingDialog.startLoadingDialog()
+            Log.e("firstRun","there")
+
             val manager: ConnectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val networkInfo:NetworkInfo? =manager.activeNetworkInfo
             if (networkInfo!=null && networkInfo.isConnected){
@@ -122,8 +127,14 @@ class ReciationsActivity : AppCompatActivity() {
 
                     roomViewModel.insertSurahsNamesList(it)
                     pref.edit().putBoolean("firstRun", false).apply()
+                    Log.e("firstRun","inside")
+                    Log.e("firstRun","inside $it")
+                    roomViewModel.sureInsertSurahsNames.observe(this, Observer {
+                        if (it){
+                            getSurhasNamesWithIdsFromDataBase()
+                        }
+                    })
             //        loadingDialog.dismissDialog()
-                    getSurhasNamesWithIdsFromDataBase()
 
                 })
 
@@ -147,24 +158,44 @@ class ReciationsActivity : AppCompatActivity() {
  private  fun getSurhasNamesWithIdsFromDataBase(){
  // loadingDialog.startLoadingDialog()
 
-     Log.e("serverListtt", suras_reciter.toString())
 
+     Log.e("serverListtt", suras_reciter.toString())
+     var count =1
      val integerList = suras_reciter.split(",").map { it.toInt() }
 
      val listOfSurhasData= mutableListOf<SurasData>()
 
-       roomViewModel.getSurahsNamesListByIds(integerList)
+     roomViewModel.getSurahsNamesListByIds(integerList)
 
      roomViewModel.surahsNamesListWithIdsDb.observe(this, Observer {
-         for (i in it){
-            val linkUrlOfSurah=getIdsForLinkOfSurah(i.number.toString())
-             listOfSurhasData.add(SurasData(i.number.toString(),i.name,
-                 "$server_reciter/$linkUrlOfSurah.mp3"
-             ))
-         }
+         Log.e("count1", it.toString())
 
-         adapterReciation.setList(listOfSurhasData)
-         loadingDialog.dismissDialog()
+         for (i in it){
+                count++
+                Log.e("count2", count.toString())
+
+                val linkUrlOfSurah=getIdsForLinkOfSurah(i.number.toString())
+                listOfSurhasData.add(SurasData(i.number.toString(),i.name,
+                    "$server_reciter/$linkUrlOfSurah.mp3"
+                ))
+            }
+
+
+
+            adapterReciation.setList(listOfSurhasData)
+            loadingDialog.dismissDialog()
+
+
+
+
+
+
+
+
+
+
+
+
 
      })
    }

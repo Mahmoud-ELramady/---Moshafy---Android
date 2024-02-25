@@ -29,5 +29,11 @@
 
     <style name="Theme.Quany.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="TextStyle.Quran" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">22sp</item>
+        <item name="android:fontFamily">@font/font_quran</item>
+        <item name="fontFamily">@font/font_quran</item>
+        <item name="android:letterSpacing">0.03</item>
+    </style>
 
 </resources>

@@ -47,7 +47,7 @@
                         android:layout_height="wrap_content"
                         android:text="99"
                         android:textColor="@color/color_number_aya"
-                        android:textSize="14sp" />
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 
@@ -93,10 +93,11 @@
                             android:id="@+id/aya_with_arabic"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Ayat"
+                            android:text="Ayatttttttttttttttt"
                             android:textColor="#171515"
                             android:textAlignment="viewEnd"
-                            android:textSize="18sp" />
+                            style="@style/TextStyle.Quran"
+                            />
 
                     </LinearLayout>
 
@@ -110,9 +111,11 @@
                             android:id="@+id/aya_with_english"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Arti"
+                            android:text="Artikjnjknjk"
                             android:textColor="#171515"
-                            android:textSize="14sp" />
+                            style="@style/TextStyle.Quran"
+                            android:textSize="14sp"
+                            />
 
                     </LinearLayout>
 

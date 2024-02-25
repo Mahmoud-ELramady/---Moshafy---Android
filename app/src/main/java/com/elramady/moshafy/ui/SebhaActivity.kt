@@ -149,6 +149,8 @@ class SebhaActivity : AppCompatActivity() {
 
 
 
+            }else{
+                dialogAddSebha.show()
             }
 
 
@@ -165,6 +167,7 @@ class SebhaActivity : AppCompatActivity() {
                 bindingDeleteSumSebhaDialog.dialogDeleteBtn2.setOnClickListener {
                     isCount=true   //to update allSebhaList only
                     viewModel.deleteAllCountOfSebha()
+                    numberOfCountSebhaItem=0
                     dialogSure.dismiss()
                     Toast.makeText(this,"تم تصفير كل العدادات",Toast.LENGTH_SHORT).show()
 
@@ -291,19 +294,30 @@ class SebhaActivity : AppCompatActivity() {
     private fun whenShowingDialogAddingSebha() {
         bindingAddSebhaDialog.btnAddSebha.setOnClickListener {
 
-         isCount=false
 
-         val titleSebha= bindingAddSebhaDialog.dialogEdSebhaContent.text.toString()
+            isCount=false
+
+            val titleSebha= bindingAddSebhaDialog.dialogEdSebhaContent.text.toString()
+
+            if (titleSebha.isNotEmpty()){
+                viewModel.insertSebha(SebhaData(title =titleSebha, numberOfSebha = 0))
+
+                Toast.makeText(this,"تمت اضافة السبحة",Toast.LENGTH_SHORT).show()
+                bindingAddSebhaDialog.dialogEdSebhaContent.setText("")
+                //       bindingAddSebhaDialog.dialogEdSebhaContent.isFocusable=false
+                dialogAddSebha.dismiss()
+            }else{
+                Toast.makeText(this,"من فضلك ادخل جملة تسبيح",Toast.LENGTH_SHORT).show()
+            }
 
 
-            viewModel.insertSebha(SebhaData(title =titleSebha, numberOfSebha = 0))
-
-            Toast.makeText(this,"تمت اضافة السبحة",Toast.LENGTH_SHORT).show()
-            bindingAddSebhaDialog.dialogEdSebhaContent.setText("")
-     //       bindingAddSebhaDialog.dialogEdSebhaContent.isFocusable=false
-            dialogAddSebha.dismiss()
 
         }
+
+
+    }
+
+    private fun addNewSebha() {
 
 
     }

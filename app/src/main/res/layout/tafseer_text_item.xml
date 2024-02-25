@@ -68,8 +68,9 @@
                             android:layout_height="wrap_content"
                             android:text="Tafseer Text"
                             android:textColor="#171515"
+                            style="@style/TextStyle.Quran"
                             android:textAlignment="viewEnd"
-                            android:textSize="18sp" />
+                            />
 
                     </LinearLayout>
 

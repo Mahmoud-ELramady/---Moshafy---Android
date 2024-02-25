@@ -47,6 +47,9 @@ class SurahsTextAdapter (val context: Context): RecyclerView.Adapter<SurahsTextA
             binding.ayaWithArabic.text=verse.text
             binding.ayaWithEnglish.text=verse.translationEn
 
+         //   binding.ayaWithArabic.setTextAppearance(R.style.TextStyle_Quran)
+         //   binding.ayaWithEnglish.setTextAppearance(R.style.TextStyle_Quran)
+
             binding.shareIvAya.setOnClickListener {
               val shareIntent: Intent =  Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
