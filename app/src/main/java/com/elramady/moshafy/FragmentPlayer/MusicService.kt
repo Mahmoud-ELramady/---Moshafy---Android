@@ -8,10 +8,12 @@ import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.AudioAttributes
+import android.media.MediaMetadata
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
+import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -34,7 +36,7 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
     lateinit var mediaSessionCompat: MediaSessionCompat
      var notification: Notification?=null
 
-    lateinit var actionPlaying: ActionPlaying
+     private var actionPlaying: ActionPlaying?=null
     lateinit var url:String
 
     lateinit var nameReciter: String
@@ -64,6 +66,8 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
     override fun onCreate() {
         super.onCreate()
         mediaSessionCompat = MediaSessionCompat(this, "My Audio")
+        val mediaMetaData=MediaMetadata.Builder().putLong(MediaMetadata.METADATA_KEY_DURATION,-1L).build()
+        mediaSessionCompat.setMetadata(MediaMetadataCompat.fromMediaMetadata(mediaMetaData))
         Log.e("closeee","new Service")
         pref=getSharedPreferences("isPlayingDestroy", MODE_PRIVATE)
 
@@ -91,14 +95,14 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
         when (actionName){
             "playPause" -> {
                 if (actionPlaying!=null){
-                    actionPlaying.playPauseBtnClick()
+                    actionPlaying?.playPauseBtnClick()
                 }
             }
             "Next" ->{
                 try {
 
                     if (actionPlaying!=null) {
-                        actionPlaying.nextBtnClick()
+                        actionPlaying?.nextBtnClick()
 
                     }
                 }catch (e:Exception){
@@ -108,7 +112,7 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
             }
             "Previous"->{
                 if (actionPlaying!=null){
-                    actionPlaying.prevBtnClick()
+                    actionPlaying?.prevBtnClick()
                 }
             }
             "Close"->{
@@ -118,7 +122,7 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
 
                 if (destroy){
                     Log.e("closeeeeeee","destroy")
-                    actionPlaying.closeBtnClick()
+                    actionPlaying?.closeBtnClick()
                     stopForeground(STOP_FOREGROUND_REMOVE)
 
                 }else{
@@ -181,8 +185,8 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
     fun release(){
         mediaPlayer!!.release()
     }
-    fun getDuration():Int {
-       return mediaPlayer!!.duration
+    fun getDuration():Int? {
+       return mediaPlayer?.duration
     }
     fun getCurrentPosition():Int{
         return mediaPlayer!!.currentPosition
@@ -220,7 +224,7 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
     override fun onCompletion(mp: MediaPlayer?) {
 
         if (actionPlaying!=null){
-            actionPlaying.nextBtnClick()
+            actionPlaying?.nextBtnClick()
             if (mediaPlayer!=null){
                 createMediaPlayer(url)
                 mediaPlayer!!.start()
@@ -236,7 +240,7 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
 
 
     @SuppressLint("ForegroundServiceType")
-    fun showNotification(playPauseBtn: Int, nameReciter:String, nameSurah:String) {
+    fun showNotification(playPauseBtn: Int, nameReciter:String, nameSurah:String,max:Int,progress:Int) {
 
         this.nameSurah=nameSurah
         this.nameReciter=nameReciter
@@ -247,7 +251,7 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
             // Add the intent, which inflates the back stack
             addNextIntentWithParentStack(intent)
             // Get the PendingIntent containing the entire back stack
-            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
 //        intent.addCategory(Intent.CATEGORY_LAUNCHER)
 //        intent.setAction(Intent.ACTION_MAIN)
@@ -269,18 +273,21 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
         val prevIntent = Intent(this, NotificationReceiver::class.java)
                 .setAction(ApplicationClass.ACTION_PREVIOUS)
         val prevPending: PendingIntent = PendingIntent
-                .getBroadcast(this, 0, prevIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+                .getBroadcast(this, 0, prevIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         val pauseIntent = Intent(this, NotificationReceiver::class.java)
                 .setAction(ApplicationClass.ACTION_PLAY)
         val pausePending: PendingIntent = PendingIntent
-                .getBroadcast(this, 0, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+                .getBroadcast(this, 0, pauseIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
 
         val nextIntent = Intent(this, NotificationReceiver::class.java)
                 .setAction(ApplicationClass.ACTION_NEXT)
         val nextPending: PendingIntent = PendingIntent
-                .getBroadcast(this, 0, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+                .getBroadcast(this, 0, nextIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
 
 
@@ -296,7 +303,9 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
                     .setContentText(nameReciter)
                     .setLargeIcon(icon)
                     .setColor(Color.WHITE)
-                .setAutoCancel(true)
+                    .setProgress(max,progress,true)
+                    .setAutoCancel(true)
+
               // .setContentIntent(resultPendingIntent)
                     .addAction(R.drawable.previous_audio, "Previous", prevPending)
                     .addAction(playPauseBtn, "Pause", pausePending)
@@ -304,6 +313,7 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
                      .addAction(R.drawable.ic_close,"Close",closePending)
                     .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
                             .setMediaSession(mediaSessionCompat.sessionToken))
+//                .setStyle(androidx.media.app.NotificationCompat.MediaStyle())
                     .setOnlyAlertOnce(true)
                 .setAutoCancel(true)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -311,11 +321,16 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
 
                     .build()
 
+
             startForeground(2, notification)
         }
-        }
+    }
 
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+    }
 
 fun callBack(actionPlaying: ActionPlaying){
     this.actionPlaying=actionPlaying

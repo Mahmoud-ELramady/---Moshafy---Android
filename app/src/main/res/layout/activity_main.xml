@@ -119,7 +119,6 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
                                 android:text="@string/tafseerIcon"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:textAlignment="viewEnd"
@@ -160,7 +159,6 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:textAlignment="viewEnd"
                                 android:text="@string/quranEnglish"
@@ -183,7 +181,8 @@
                         android:clickable="true"
                         app:cardElevation="@dimen/_6sdp"
                         app:cardCornerRadius="@dimen/_12sdp"
-                        android:layout_margin="@dimen/_12sdp">
+                        android:layout_margin="@dimen/_12sdp"
+                        android:focusable="true">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -200,8 +199,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:text="الأذكار"
+                                android:text="@string/azkar"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:textAlignment="viewEnd"
                                 android:textColor="#000"
@@ -239,7 +237,6 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
                                 android:text="@string/iconReciters"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:textAlignment="viewEnd"
@@ -261,7 +258,8 @@
                         android:clickable="true"
                         app:cardElevation="@dimen/_6sdp"
                         app:cardCornerRadius="@dimen/_12sdp"
-                        android:layout_margin="@dimen/_12sdp">
+                        android:layout_margin="@dimen/_12sdp"
+                        android:focusable="true">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -279,10 +277,9 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:textAlignment="viewEnd"
-                                android:text="السبحة"
+                                android:text="@string/sebha"
                                 android:textColor="#000"
                                 android:textSize="@dimen/_15sdp" />
 
@@ -292,7 +289,86 @@
 
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/sera_nabawya"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:clickable="true"
+                        app:cardElevation="@dimen/_6sdp"
+                        android:layout_column="1"
+                        app:cardCornerRadius="@dimen/_12sdp"
+                        android:layout_margin="@dimen/_12sdp"
+                        android:focusable="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:padding="@dimen/_18sdp"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="@dimen/_50sdp"
+                                android:layout_height="@dimen/_50sdp"
+                                android:src="@drawable/muhammad_icon" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/sera_nabawya"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:textAlignment="viewEnd"
+                                android:textColor="#000"
+                                android:textSize="@dimen/_15sdp" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+
+
+
+                    <com.google.android.material.card.MaterialCardView
                         android:id="@+id/about_app"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:clickable="true"
+                        app:cardElevation="@dimen/_6sdp"
+                        app:cardCornerRadius="@dimen/_12sdp"
+                        android:layout_margin="@dimen/_12sdp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:padding="@dimen/_18sdp"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="@dimen/_50sdp"
+                                android:layout_height="@dimen/_50sdp"
+                                android:src="@drawable/logo_moshafy"
+                                />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:textAlignment="viewEnd"
+                                android:text="@string/about_app"
+                                android:textColor="#000"
+                                android:textSize="@dimen/_15sdp" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/ramadans_nights"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
@@ -313,13 +389,14 @@
                             <ImageView
                                 android:layout_width="@dimen/_50sdp"
                                 android:layout_height="@dimen/_50sdp"
-                                android:src="@drawable/logo_moshafy" />
+                                android:src="@drawable/icon_ramadan"
+                                />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
-                                android:text="عن التطبيق"
+                                android:text="@string/ramadans"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:textAlignment="viewEnd"
                                 android:textColor="#000"
@@ -331,7 +408,12 @@
 
 
 
-                 
+
+
+
+
+
+
 
 
 

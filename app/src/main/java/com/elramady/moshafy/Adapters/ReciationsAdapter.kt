@@ -1,10 +1,18 @@
 package com.elramady.moshafy.Adapters
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.elramady.moshafy.ConnectivityUtil
@@ -14,6 +22,7 @@ import com.elramady.moshafy.vo.RecitersDetails.SurasData
 import com.elramady.moshafy.FragmentPlayer.PlayerReciationActivity
 import com.elramady.moshafy.LoadingDialog
 import com.elramady.moshafy.ui.ReciationsActivity
+import com.google.android.material.snackbar.Snackbar
 
 
 class ReciationsAdapter(val context: Context,val activity: ReciationsActivity): RecyclerView.Adapter<ReciationsAdapter.ReciationsViewHolder>() {
@@ -48,10 +57,13 @@ class ReciationsAdapter(val context: Context,val activity: ReciationsActivity): 
 
 
    inner class ReciationsViewHolder(val binding:ReciationsNamesItemBinding) : RecyclerView.ViewHolder(binding.root){
-lateinit var loadingDialog: LoadingDialog
-        fun bind(surasData: SurasData, context: Context,activity: ReciationsActivity) {
+        lateinit var loadingDialog: LoadingDialog
+
+       fun bind(surasData: SurasData, context: Context, activity: ReciationsActivity) {
             binding.nameReciations.text=surasData.name
             binding.numberReciations.text=surasData.id
+
+
 
             binding.containerReciationsNames.setOnClickListener {
 
@@ -60,25 +72,28 @@ lateinit var loadingDialog: LoadingDialog
 ////                loadingDialog.startLoadingDialog()
 
                     if (ConnectivityUtil.isConnected(context)){
+
                         val intent: Intent = Intent(context, PlayerReciationActivity::class.java)
                         intent.putExtra("url", surasData.url)
                         intent.putExtra("surah_Name", surasData.name)
                         intent.putExtra("position",position)
                         context.startActivity(intent)
+
 //                    loadingDialog.dismissDialog()
                     }else{
                         Toast.makeText(context,"تأكد من اتصالك بالأنترنت", Toast.LENGTH_SHORT).show()
 
                     }
 
-
-                
             }
 
         }
 
 
 
-    }
+
+   }
+
+
 
 }

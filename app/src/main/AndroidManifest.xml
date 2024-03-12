@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".FragmentPlayer.ApplicationClass"
@@ -23,6 +24,18 @@
         android:theme="@style/Theme.Moshafy"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.DetailsJsonActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.JsonDataListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ui.AllDataSeraNabwya"
+            android:exported="false" />
+        <activity
+            android:name=".ui.SeraNabwyaActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.SebhaActivity"
             android:exported="false" />
         <activity
@@ -31,7 +44,8 @@
         <activity
             android:name=".ui.AboutAppActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -47,31 +61,38 @@
             android:name=".ui.AzkarTapActivity"
             android:label="@string/title_activity_azkar_tap"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Quany.NoActionBar" />
+            android:theme="@style/Theme.Quany.NoActionBar"
+            tools:ignore="LockedOrientationActivity" />
         <activity android:name=".ui.TafseerTextActivity" />
         <activity android:name=".ui.TafseerSurahsNamesActivity" />
         <activity android:name=".ui.TafseerActivity" />
         <activity
             android:name=".ui.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".FragmentPlayer.PlayerReciationActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ui.ReciationsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ui.RecitersActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ui.TextSurahActivity"
             android:screenOrientation="fullSensor" />
         <activity
             android:name=".ui.SurahsNamesActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ui.MoshfPdfActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ui.SplashActivity"
             android:exported="true">

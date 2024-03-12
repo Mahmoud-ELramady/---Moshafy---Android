@@ -22,9 +22,10 @@ import com.elramady.moshafy.vo.RecitersDetails.SurasData
 import java.util.*
 import kotlin.collections.ArrayList
 
+const val TAG="PlayActivity"
 class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,ServiceConnection {
 
-   lateinit var binding: ActivityPlayerReciationBinding
+    lateinit var binding: ActivityPlayerReciationBinding
 
     var url: String = ""
     var nameReciter: String = ""
@@ -41,12 +42,13 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
     lateinit var nextThread: Thread
     lateinit var closeThread: Thread
     lateinit var playFirstThread: Thread
-     var musicService: MusicService?=null
+    var musicService: MusicService?=null
     lateinit var fragPlayNow:PlayingNowFragment
 
-lateinit var pref:SharedPreferences
+    lateinit var pref:SharedPreferences
+
     companion object{
-        val pathName="Qurany.mp3"
+        val pathName="moshafy.mp3"
         val REQUESTED_CODE:Int=1
         var isDestroy=false
 
@@ -54,7 +56,7 @@ lateinit var pref:SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-         binding = DataBindingUtil.setContentView(this,R.layout.activity_player_reciation)
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_player_reciation)
 
         loadingDialog= LoadingDialog(this)
 
@@ -72,7 +74,12 @@ lateinit var pref:SharedPreferences
 
         binding.reciterReciationNameTextView.isSelected=true
 
-        getIntentMethod()
+        try {
+            getIntentMethod()
+        }catch (e:Exception){
+            Log.e(TAG,e.message.toString())
+
+        }
 
 
         binding.reciterReciationNameTextView.text =
@@ -83,7 +90,7 @@ lateinit var pref:SharedPreferences
         }
 
         binding.seekPlayer.setOnSeekBarChangeListener(object :
-                SeekBar.OnSeekBarChangeListener {
+            SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (musicService != null && fromUser) {
 
@@ -143,7 +150,7 @@ lateinit var pref:SharedPreferences
         alertDialog.setCancelable(false)
         alertDialog.setPositiveButton("نعم",object :DialogInterface.OnClickListener{
             override fun onClick(dialog: DialogInterface?, which: Int) {
-                if (setPermission()==true){
+                if (setPermission()){
                     downloadReciation(url, pathName)
                 }else{
                     setPermission()
@@ -151,11 +158,11 @@ lateinit var pref:SharedPreferences
             }
         })
 
-       alertDialog.setNegativeButton("لا",object :DialogInterface.OnClickListener{
-           override fun onClick(dialog: DialogInterface?, which: Int) {
-               Toast.makeText(this@PlayerReciationActivity,"حسنا!",Toast.LENGTH_SHORT).show()
-           }
-       })
+        alertDialog.setNegativeButton("لا",object :DialogInterface.OnClickListener{
+            override fun onClick(dialog: DialogInterface?, which: Int) {
+                Toast.makeText(this@PlayerReciationActivity,"حسنا!",Toast.LENGTH_SHORT).show()
+            }
+        })
         val alertDialog2=alertDialog.create()
         alertDialog2.show()
     }
@@ -168,8 +175,8 @@ lateinit var pref:SharedPreferences
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(
-                        arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                        REQUESTED_CODE
+                    arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    REQUESTED_CODE
                 )
 
                 return false
@@ -235,10 +242,10 @@ lateinit var pref:SharedPreferences
         this.runOnUiThread(Runnable {
 
 
-            val durationTotal = (musicService!!.getDuration().toInt() / 1000)
+            val durationTotal = (musicService?.getDuration()?.toInt()?.div(1000))
             Log.e("printmeddia",(musicService!!.getDuration()) .toString())
 
-            binding.timeDurationPlayer.text = formattedTime(durationTotal)
+            binding.timeDurationPlayer.text = durationTotal?.let { formattedTime(it) }
             Log.e("durationD", durationTotal.toString())
         })
     }
@@ -286,13 +293,13 @@ lateinit var pref:SharedPreferences
         musicService!!.callBack(this)
 
 
-        binding.seekPlayer.max = (musicService!!.getDuration()) / 1000
+        binding.seekPlayer.max = (musicService?.getDuration())?.div(1000) ?: 0
         metaData()
 
 
 
-        musicService!!.showNotification(R.drawable.pause_noti,nameReciter,nameSurah)
-        musicService!!.onCompleted()
+        musicService?.showNotification(R.drawable.pause_noti,nameReciter,nameSurah,(musicService?.getDuration())?.div(1000) ?: 0,(musicService!!.getCurrentPosition().toInt() ) / 1000)
+        musicService?.onCompleted()
 
 
 
@@ -306,7 +313,7 @@ lateinit var pref:SharedPreferences
 
     override fun onPause() {
         super.onPause()
-       unbindService(this)
+        unbindService(this)
 
     }
 
@@ -314,12 +321,17 @@ lateinit var pref:SharedPreferences
 
     override fun onResume() {
 
-        var intent:Intent=Intent(this,MusicService::class.java)
-        bindService(intent,this, Context.BIND_AUTO_CREATE)
-        playThreadBtn()
-        prevThreadBtn()
-        nextThreadBtn()
-      //  closeBtnClick()
+        try {
+            var intent:Intent=Intent(this,MusicService::class.java)
+            bindService(intent,this, Context.BIND_AUTO_CREATE)
+            playThreadBtn()
+            prevThreadBtn()
+            nextThreadBtn()
+        }catch (e:Exception){
+            Log.e(TAG,e.message.toString())
+        }
+
+        //  closeBtnClick()
         super.onResume()
 
     }
@@ -343,7 +355,6 @@ lateinit var pref:SharedPreferences
     }
     override fun onDestroy() {
         pref.edit().putBoolean("isPlayingDestroy", true).apply()
-
         super.onDestroy()
         Log.e("destroyMusic","destroyMusic")
     }
@@ -353,39 +364,39 @@ lateinit var pref:SharedPreferences
         if (musicService!!.isPlaying()){
 
             binding.playPauseLayout.setImageResource(R.drawable.play_audio)
-        musicService!!.showNotification(R.drawable.play_noti,nameReciter,nameSurah)
+            musicService?.showNotification(R.drawable.play_noti,nameReciter,nameSurah,(musicService?.getDuration())?.div(1000) ?: 0,(musicService!!.getCurrentPosition().toInt() ) / 1000)
 
 
-            musicService!!.pause()
-            binding.seekPlayer.max=musicService!!.getDuration()/1000
+            musicService?.pause()
+            binding.seekPlayer.max= musicService?.getDuration()?.div(1000) ?:0
 
             this.runOnUiThread(Runnable {
                 if (musicService!=null){
-                    val mCurrentPosition=musicService!!.getCurrentPosition()/1000
+                    val mCurrentPosition= musicService?.getCurrentPosition()?.div(1000)?:0
                     binding.seekPlayer.progress=mCurrentPosition
                 }
                 handler.postDelayed(this,1000)
 
-            })
+            } )
 
 
         }else{
 
 
-        musicService!!.showNotification(R.drawable.pause_noti,nameReciter,nameSurah)
+            musicService?.showNotification(R.drawable.pause_noti,nameReciter,nameSurah,(musicService?.getDuration())?.div(1000) ?: 0,(musicService!!.getCurrentPosition().toInt() ) / 1000)
             binding.playPauseLayout.setImageResource(R.drawable.pause_audio)
 
-            musicService!!.start()
-            binding.seekPlayer.max=musicService!!.getDuration()/1000
+            musicService?.start()
+            binding.seekPlayer.max= musicService?.getDuration()?.div(1000) ?:0
 
             this.runOnUiThread(Runnable {
                 if (musicService!=null){
-                    var mCurrentPosition=musicService!!.getCurrentPosition()/1000
+                    var mCurrentPosition= musicService?.getCurrentPosition()?.div(1000)?:0
                     binding.seekPlayer.progress=mCurrentPosition
                 }
                 handler.postDelayed(this,1000)
 
-            })
+            } )
 
 
         }
@@ -429,24 +440,24 @@ lateinit var pref:SharedPreferences
             metaData()
             nameSurah= reciationsFrag.get(position).name
             binding.reciterReciationNameTextView.text= nameReciter+" - "+nameSurah+"           "+nameReciter + " - " + nameSurah
-            binding.seekPlayer.max=musicService!!.getDuration()/1000
+            binding.seekPlayer.max= musicService?.getDuration()?.div(1000) ?:0
 
             this.runOnUiThread(Runnable {
                 if (musicService!=null){
-                    val mCurrentPosition=musicService!!.getCurrentPosition()/1000
+                    val mCurrentPosition= musicService?.getCurrentPosition()?.div(1000)?:0
                     binding.seekPlayer.setProgress(mCurrentPosition)
                 }
                 handler.postDelayed(this,1000)
 
-            })
-            musicService!!.onCompleted()
-        musicService!!.showNotification(R.drawable.pause_noti,nameReciter,nameSurah)
+            } )
+            musicService?.onCompleted()
+            musicService?.showNotification(R.drawable.pause_noti,nameReciter,nameSurah,(musicService?.getDuration())?.div(1000) ?: 0,(musicService!!.getCurrentPosition().toInt() ) / 1000)
             binding.playPauseLayout.setImageResource(R.drawable.pause_audio)
-            musicService!!.start()
+            musicService?.start()
 
         }else{
-            musicService!!.stop()
-            musicService!!.release()
+            musicService?.stop()
+            musicService?.release()
             if (ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean){
                 position=getPosition(reciationsFrag.size - 1)
             }else if (!ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean){
@@ -458,25 +469,25 @@ lateinit var pref:SharedPreferences
             }
             url= reciationsFrag.get(position).url
 
-            musicService!!.createMediaPlayer(url)
+            musicService?.createMediaPlayer(url)
             metaData()
             nameSurah= reciationsFrag.get(position).name
             binding.reciterReciationNameTextView.text= nameReciter+" - "+nameSurah+"           "+nameReciter + " - " + nameSurah
-            binding.seekPlayer.max=musicService!!.getDuration()/1000
+            binding.seekPlayer.max= musicService?.getDuration()?.div(1000) ?:0
 
 
             this.runOnUiThread(Runnable {
                 if (musicService!=null){
-                    var  mCurrentPosition=musicService!!.getCurrentPosition()/1000
+                    var  mCurrentPosition= musicService?.getCurrentPosition()?.div(1000)?:0
                     binding.seekPlayer.setProgress(mCurrentPosition)
                 }
                 handler.postDelayed(this,1000)
 
-            })
-            musicService!!.onCompleted()
+            } )
+            musicService?.onCompleted()
 
 
-        musicService!!.showNotification(R.drawable.play_noti,nameReciter,nameSurah)
+            musicService?.showNotification(R.drawable.play_noti,nameReciter,nameSurah,(musicService?.getDuration())?.div(1000) ?: 0,(musicService!!.getCurrentPosition().toInt() ) / 1000)
             binding.playPauseLayout.setImageResource(R.drawable.play_audio)
         }
 
@@ -484,7 +495,7 @@ lateinit var pref:SharedPreferences
     }
 
     override fun closeBtnClick() {
-        musicService!!.stop()
+        musicService?.stop()
         binding.playPauseLayout.setImageResource(R.drawable.play_audio)
 
         //   musicService!!.showNotification(R.drawable.play_noti,nameReciter,nameSurah)
@@ -500,7 +511,7 @@ lateinit var pref:SharedPreferences
     }
 
 
-    public fun nextThreadBtn() {
+     fun nextThreadBtn() {
         nextThread=Thread(Runnable {
             binding.nextImageView.setOnClickListener {
                 nextBtnClick()
@@ -510,10 +521,10 @@ lateinit var pref:SharedPreferences
 
 
     }
-    public override fun nextBtnClick()  {
+     override fun nextBtnClick()  {
         if (musicService!!.isPlaying()){
-            musicService!!.stop()
-            musicService!!.release()
+            musicService?.stop()
+            musicService?.release()
 
             if (ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean){
                 position=getPosition(reciationsFrag.size - 1)
@@ -522,16 +533,16 @@ lateinit var pref:SharedPreferences
             }
 
             url= reciationsFrag.get(position).url
-            musicService!!.createMediaPlayer(url)
+            musicService?.createMediaPlayer(url)
             metaData()
 
             nameSurah= reciationsFrag.get(position).name
             binding.reciterReciationNameTextView.text= nameReciter+" - "+nameSurah+"           "+nameReciter + " - " + nameSurah
-            binding.seekPlayer.max= musicService!!.getDuration()/1000
+            binding.seekPlayer.max= musicService?.getDuration()?.div(1000) ?: 0
 
             this.runOnUiThread(Runnable {
                 if (musicService!=null){
-                    var  mCurrentPosition=musicService!!.getCurrentPosition()/1000
+                    var  mCurrentPosition= musicService?.getCurrentPosition()?.div(1000)?:0
                     binding.seekPlayer.setProgress(mCurrentPosition)
                 }
                 handler.postDelayed(this,1000)
@@ -539,15 +550,15 @@ lateinit var pref:SharedPreferences
             })
 
 
-            musicService!!.onCompleted()
-        musicService!!.showNotification(R.drawable.pause_noti,nameReciter,nameSurah)
-        binding.playPauseLayout.setBackgroundResource(R.drawable.pause_audio)
-            musicService!!.start()
+            musicService?.onCompleted()
+            musicService?.showNotification(R.drawable.pause_noti,nameReciter,nameSurah,(musicService?.getDuration())?.div(1000) ?: 0,(musicService!!.getCurrentPosition().toInt() ) / 1000)
+            binding.playPauseLayout.setBackgroundResource(R.drawable.pause_audio)
+            musicService?.start()
 
 
         }else{
-            musicService!!.stop()
-            musicService!!.release()
+            musicService?.stop()
+            musicService?.release()
 
             if (ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean){
                 position=getPosition(reciationsFrag.size - 1)
@@ -560,7 +571,7 @@ lateinit var pref:SharedPreferences
             nameSurah= reciationsFrag.get(position).name
 
             binding.reciterReciationNameTextView.text= nameReciter+" - "+nameSurah+"           "+nameReciter + " - " + nameSurah
-            binding.seekPlayer.max=musicService!!.getDuration()/1000
+            binding.seekPlayer.max= musicService?.getDuration()?.div(1000) ?:0
 
 
             this.runOnUiThread(Runnable {
@@ -570,9 +581,9 @@ lateinit var pref:SharedPreferences
                 }
                 handler.postDelayed(this,1000)
 
-            })
-            musicService!!.onCompleted()
-            musicService!!.showNotification(R.drawable.play_noti,nameReciter,nameSurah)
+            } )
+            musicService?.onCompleted()
+            musicService?.showNotification(R.drawable.play_noti,nameReciter,nameSurah,(musicService?.getDuration())?.div(1000) ?: 0,(musicService!!.getCurrentPosition().toInt() ) / 1000)
             binding.playPauseLayout.setBackgroundResource(R.drawable.play_audio)
 
 

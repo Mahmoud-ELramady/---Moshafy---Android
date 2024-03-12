@@ -21,6 +21,20 @@
     <string name="are_you_sure_to_delete_sebha">هل انت متأكد من مسح السبحة؟</string>
     <string name="are_you_sure_to_set_sum_zero">هل انت متأكد من تصفير كل العدادات؟</string>
     <string name="text_about_app">تطبيق مُصحفى هو تطبيق دينى يحتوى على أربع أقسام رئيسية:\n\n القرأن:\n وهو يحتوى على القرأن وترجمته بالإنجليزية عند اختيار السوره المراد قرأتها\n\n التلاوات:\n وهو يحتوى على أكثر من 200 قارئ بمختلف التلاوات وإمكانية البحث \n بأسم القارئ أو التلاوة ثم اختيار السورة المراد سماعها مع امكانية تحميل السورة من زر أسفل يمين الشاشه \n\n تفسير القرأن:\n يحتوى على مجموعة كبيره من التفاسير منها العربية والإنجليزية مع اختيار السوره ثم الضغط على الأية المراد تفسيرها\n\n الأذكار:\n يوجد به الاذكار مكتوبه ومسموعة والأذكار المسموعة يمكن تحميلها\n \n ملحوظة: \n التطبيق يعمل بالأنترنت ولكن أى شئ يتم فتحه بالأنترنت لأول مرة يمكن بعد ذلك فتحه من غير انترنت</string>
+    <string name="about_app">عن التطبيق</string>
+    <string name="ramadans">رمضانيات</string>
+    <string name="sera_nabawya">السيرة النبوية</string>
+    <string name="sebha">السبحة</string>
+    <string name="azkar">الأذكار</string>
+    <string name="life_prophet">حياة الرسول صلى الله عليه وسلم</string>
+    <string name="wife_prophet">سيرة زوجات وأولاد الرسول صلى الله عليه وسلم</string>
+    <string name="ghazwa_prophet">غزوات الرسول صلى الله عليه وسلم</string>
+    <string name="about_prophet">نبذة عن حياة الرسول صلى الله عليه وسلم</string>
+    <string name="rules_ramadan">أحكام وفتاوى رمضان المبارك</string>
+    <string name="doaa_ramadan">أدعية لشهر رمضان المبارك</string>
+    <string name="health_ramadan">صحتك في شهر رمضان المبارك</string>
+    <string name="finish_quran_ramadan">طرق ختم القران الكريم في رمضان</string>
+    <string name="adivce_ramadan">نصائح لشهر رمضان المبارك</string>
 
 
     <string-array name="spinner_string_array">

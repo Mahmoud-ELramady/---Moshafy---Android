@@ -58,8 +58,7 @@ class SurahsNamesActivity : AppCompatActivity() {
         rc.adapter=adapter
         rc.setHasFixedSize(true)
 
-
-checkRun()
+        checkRun()
     }
 
     override fun onResume() {
