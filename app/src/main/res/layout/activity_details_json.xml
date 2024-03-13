@@ -54,6 +54,7 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:gravity="center"
+                    android:lines="4"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_15sdp"
                     app:layout_constraintTop_toTopOf="parent"

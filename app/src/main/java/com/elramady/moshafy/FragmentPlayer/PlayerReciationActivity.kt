@@ -1,16 +1,26 @@
 package com.elramady.moshafy.FragmentPlayer
 
+import android.R.drawable
 import android.app.DownloadManager
 import android.content.*
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.*
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import android.view.View
+import android.widget.RelativeLayout
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
 import com.elramady.moshafy.Adapters.ReciationsAdapter
 import com.elramady.moshafy.ConnectivityUtil
@@ -20,7 +30,7 @@ import com.elramady.moshafy.databinding.ActivityPlayerReciationBinding
 import com.elramady.moshafy.ui.ReciationsActivity
 import com.elramady.moshafy.vo.RecitersDetails.SurasData
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 const val TAG="PlayActivity"
 class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,ServiceConnection {
@@ -56,10 +66,11 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = DataBindingUtil.setContentView(this,R.layout.activity_player_reciation)
 
-        loadingDialog= LoadingDialog(this)
 
+        loadingDialog= LoadingDialog(this)
 
 
 
@@ -208,7 +219,7 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
             Toast.makeText(this@PlayerReciationActivity,"انظر لوحة الاشعارات",Toast.LENGTH_SHORT).show()
             val request: DownloadManager.Request = DownloadManager.Request(Uri.parse(url))
             request.setTitle(nameSurah+" - "+nameReciter)
-            request.setDescription("قرآنى")
+            request.setDescription(resources.getString(R.string.app_name))
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             request.allowScanningByMediaScanner()
             request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,outPutFileName)

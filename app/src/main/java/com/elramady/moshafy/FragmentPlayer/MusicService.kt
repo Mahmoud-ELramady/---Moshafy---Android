@@ -5,24 +5,23 @@ import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.media.AudioAttributes
-import android.media.MediaMetadata
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
-import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.content.res.ResourcesCompat
 import com.elramady.moshafy.FragmentPlayer.ApplicationClass.Companion.CHANNEL_ID_2
-import com.elramady.moshafy.FragmentPlayer.PlayerReciationActivity.Companion.isDestroy
 import com.elramady.moshafy.R
 import com.elramady.moshafy.vo.RecitersDetails.SurasData
-import okhttp3.internal.notify
 
 
 class MusicService : Service() ,MediaPlayer.OnCompletionListener {
@@ -66,8 +65,8 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
     override fun onCreate() {
         super.onCreate()
         mediaSessionCompat = MediaSessionCompat(this, "My Audio")
-        val mediaMetaData=MediaMetadata.Builder().putLong(MediaMetadata.METADATA_KEY_DURATION,-1L).build()
-        mediaSessionCompat.setMetadata(MediaMetadataCompat.fromMediaMetadata(mediaMetaData))
+//        val mediaMetaData=MediaMetadata.Builder().putLong(MediaMetadata.METADATA_KEY_DURATION,-1L).build()
+//        mediaSessionCompat.setMetadata(MediaMetadataCompat.fromMediaMetadata(mediaMetaData))
         Log.e("closeee","new Service")
         pref=getSharedPreferences("isPlayingDestroy", MODE_PRIVATE)
 
@@ -116,20 +115,22 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
                 }
             }
             "Close"->{
+
+
                 Log.e("closeeeeeee","closeeeeee")
-            val   destroy=  pref.getBoolean("isPlayingDestroy",true)
+                val destroy=  pref.getBoolean("isPlayingDestroy",true)
                 Log.e("closeeeeeee",destroy.toString())
 
                 if (destroy){
+
                     Log.e("closeeeeeee","destroy")
                     actionPlaying?.closeBtnClick()
                     stopForeground(STOP_FOREGROUND_REMOVE)
 
                 }else{
+
                     Log.e("closeeeeeee","non destroy")
-
                     stopForeground(STOP_FOREGROUND_REMOVE)
-
                 }
 
                // actionPlaying
@@ -244,6 +245,8 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
 
         this.nameSurah=nameSurah
         this.nameReciter=nameReciter
+
+
         val intent = Intent(this, PlayerReciationActivity::class.java).apply {
             flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -294,7 +297,13 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
         Log.e("log2", "log2")
 
 
-        val icon= BitmapFactory.decodeResource(resources,R.drawable.background_player)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+//
+//        }
+        val icon= BitmapFactory.decodeResource(resources,R.drawable.photo_play)
+
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             notification = NotificationCompat.Builder(this, ApplicationClass.CHANNEL_ID_2)
@@ -303,7 +312,7 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
                     .setContentText(nameReciter)
                     .setLargeIcon(icon)
                     .setColor(Color.WHITE)
-                    .setProgress(max,progress,true)
+                    //.setProgress(max,progress,false)
                     .setAutoCancel(true)
 
               // .setContentIntent(resultPendingIntent)
@@ -311,12 +320,12 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
                     .addAction(playPauseBtn, "Pause", pausePending)
                     .addAction(R.drawable.next_audio, "next", nextPending)
                      .addAction(R.drawable.ic_close,"Close",closePending)
-                    .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
+                     .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
                             .setMediaSession(mediaSessionCompat.sessionToken))
 //                .setStyle(androidx.media.app.NotificationCompat.MediaStyle())
-                    .setOnlyAlertOnce(true)
-                .setAutoCancel(true)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                     .setOnlyAlertOnce(true)
+                     .setAutoCancel(true)
+                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 
                     .build()

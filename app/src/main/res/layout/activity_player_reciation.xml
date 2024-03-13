@@ -8,16 +8,18 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_play"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/playerBackground"
         tools:context=".FragmentPlayer.PlayerReciationActivity">
 
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/player_background_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:cardBackgroundColor="@color/playerBackground"
+            app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="0dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -42,9 +44,9 @@
 
         <TextView
             android:id="@+id/reciter_reciation_name_text_view"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="35dp"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="20dp"
             android:elevation="10dp"
@@ -58,7 +60,7 @@
             android:singleLine="true"
             android:textAlignment="center"
             android:gravity="center"
-            android:text="Qurany"
+            android:text="@string/app_name"
             android:textColor="@color/textDefault"
             android:textSize="22sp"
             app:layout_constraintBottom_toTopOf="@id/seek_bar_layout"
@@ -71,7 +73,7 @@
             android:id="@+id/seek_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:layout_marginBottom="50dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toTopOf="@+id/parent_play"
@@ -113,22 +115,37 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <ImageView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/background_player_image_view"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="95dp"
-            android:elevation="10dp"
-            android:outlineProvider="none"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent=".3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            app:cardCornerRadius="@dimen/_15sdp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+
+            app:strokeWidth="@dimen/_1sdp"
+            app:strokeColor="@color/purple_500"
+            android:layout_marginTop="@dimen/_20sdp"
+             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/top_frame_layout"
-            app:srcCompat="@drawable/background_player" />
+            >
+
+            <ImageView
+                android:id="@+id/image_json"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_200sdp"
+                app:srcCompat="@drawable/photo_play"
+                android:scaleType="centerCrop"
+                />
+
+        </com.google.android.material.card.MaterialCardView>
 
 
-<androidx.constraintlayout.widget.ConstraintLayout
+
+
+
+   <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/parent_play"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -194,6 +211,7 @@
             android:src="@drawable/play_audio"
             android:focusable="true"
             android:clickable="true"
+            android:padding="@dimen/_5sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
