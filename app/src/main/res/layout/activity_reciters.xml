@@ -18,6 +18,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:gravity="end"
+            android:fitsSystemWindows="true"
+
             >
 
             <androidx.appcompat.widget.Toolbar

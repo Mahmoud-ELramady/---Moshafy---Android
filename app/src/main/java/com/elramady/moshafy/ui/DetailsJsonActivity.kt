@@ -1,8 +1,10 @@
 package com.elramady.moshafy.ui
 
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.ViewCompat
@@ -20,12 +22,17 @@ class DetailsJsonActivity : AppCompatActivity() {
     var activityName=""
     lateinit var pref: SharedPreferences
 
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
       //  enableEdgeToEdge()
         binding=ActivityDetailsJsonBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        window.statusBarColor = getColor(R.color.purple_700)
+        window.decorView.windowInsetsController?.setSystemBarsAppearance(
+            android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, // أيقونات غامقة (سوداء)
+            android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+        )
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)

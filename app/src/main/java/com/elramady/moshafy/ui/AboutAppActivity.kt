@@ -2,16 +2,27 @@ package com.elramady.moshafy.ui
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import com.elramady.moshafy.R
 import com.elramady.moshafy.databinding.ActivityAboutAppBinding
 
 class AboutAppActivity : AppCompatActivity() {
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ActivityAboutAppBinding = DataBindingUtil.setContentView(this, R.layout.activity_about_app)
+        window.statusBarColor = getColor(R.color.purple_700)
+        window.decorView.windowInsetsController?.setSystemBarsAppearance(
+            android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, // أيقونات غامقة (سوداء)
+            android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+        )
+
 
         binding.facebook.setOnClickListener {
             val uri: Uri = Uri.parse("https://www.facebook.com/mahmoudelrmady")

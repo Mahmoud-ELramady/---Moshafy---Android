@@ -3,6 +3,7 @@ package com.elramady.moshafy.ui
 import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -57,11 +59,16 @@ class SebhaActivity : AppCompatActivity() {
     var isCount=false
 
 
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=ActivitySebhaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        window.statusBarColor = getColor(R.color.purple_700)
+        window.decorView.windowInsetsController?.setSystemBarsAppearance(
+            android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, // أيقونات غامقة (سوداء)
+            android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+        )
         initAddSebhaDialog()
 
         initSureDialog()

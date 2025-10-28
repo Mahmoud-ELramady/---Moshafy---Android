@@ -48,9 +48,6 @@ class AzkarAdapter (val context: Context): RecyclerView.Adapter<AzkarAdapter.Azk
 
 
 
-
-
-
         }
 
     }

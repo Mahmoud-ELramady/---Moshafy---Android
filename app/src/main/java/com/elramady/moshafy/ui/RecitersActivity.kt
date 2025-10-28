@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -41,7 +42,6 @@ class RecitersActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ActivityRecitersBinding = DataBindingUtil.setContentView(this,R.layout.activity_reciters)
-
         loadingDialog= LoadingDialog(this)
 
         val toolbar=binding.mToolbarReciters

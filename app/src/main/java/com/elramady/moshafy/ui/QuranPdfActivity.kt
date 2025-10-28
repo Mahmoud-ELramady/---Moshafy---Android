@@ -26,8 +26,8 @@ class QuranPdfActivity : AppCompatActivity() {
 
   fun  renderPdf(){
 
-        binding.pdfView.fromAsset(this.assets.toString())
-            .load()
+//        binding.pdfView.fromAsset(this.assets.toString())
+//            .load()
             //   .enableSwipe(true) // allows to block changing pages
             // using swipe
 //            .swipeHorizontal(false)

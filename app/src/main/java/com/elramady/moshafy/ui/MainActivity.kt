@@ -4,16 +4,20 @@ import android.Manifest
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
 import androidx.databinding.DataBindingUtil
 import com.elramady.moshafy.R
 import com.elramady.moshafy.databinding.ActivityMainBinding
@@ -29,7 +33,7 @@ lateinit var pref: SharedPreferences
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-         binding=DataBindingUtil.setContentView(this,R.layout.activity_main)
+        binding=DataBindingUtil.setContentView(this,R.layout.activity_main)
 
         pref=getSharedPreferences("activityNames", MODE_PRIVATE)
 
