@@ -1,6 +1,15 @@
 <resources>
     <string name="app_name">مُصحفى</string>
     <string name="elmoshf">المصحف</string>
+    <string name="moshaf">المصحف</string>
+    <string name="page_picker">اختر صفحة</string>
+    <string name="bookmark">إضافة علامة</string>
+    <string name="bookmarks_list">العلامات</string>
+    <string name="page_indicator_format">صفحة %1$d / %2$d</string>
+    <string name="bookmark_added">تمت إضافة العلامة</string>
+    <string name="bookmark_removed">تمت إزالة العلامة</string>
+    <string name="download_progress_format">جاري التحميل: %1$d / %2$d</string>
+    <string name="no_bookmarks">لا توجد علامات</string>
     <string name="quranEnglish">القرأن</string>
     <string name="textProgress">انتظر يبدأ التحميل الان</string>
     <string name="search">Search</string>

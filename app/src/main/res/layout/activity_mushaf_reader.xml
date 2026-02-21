@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".mushaf.presentation.MushafReaderActivity">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:title="@string/moshaf"
+        app:navigationIcon="@drawable/ic_close" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_page_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="@dimen/_70sdp"
+            android:background="@drawable/rounded"
+            android:paddingHorizontal="@dimen/_16sdp"
+            android:paddingVertical="@dimen/_8sdp"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_14sdp"
+            tools:text="صفحة 1 / 604" />
+
+        <LinearLayout
+            android:id="@+id/download_progress_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:id="@+id/progress_download"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true" />
+
+            <TextView
+                android:id="@+id/tv_download_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                tools:text="جاري التحميل: 50 / 604" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/_12sdp"
+        android:gravity="center"
+        android:background="@android:color/white">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_page_picker"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/page_picker"
+            android:layout_marginEnd="@dimen/_8sdp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_bookmark"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bookmark"
+            android:layout_marginEnd="@dimen/_8sdp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_bookmarks_list"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bookmarks_list" />
+
+    </LinearLayout>
+
+</LinearLayout>

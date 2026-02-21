@@ -21,6 +21,7 @@ import androidx.core.view.WindowCompat
 import androidx.databinding.DataBindingUtil
 import com.elramady.moshafy.R
 import com.elramady.moshafy.databinding.ActivityMainBinding
+import com.elramady.moshafy.mushaf.presentation.MushafReaderActivity
 import com.elramady.moshafy.utils.NotificationsPermission
 import com.google.android.material.snackbar.Snackbar
 
@@ -39,6 +40,11 @@ lateinit var pref: SharedPreferences
 
         requestPermissionLauncher=  NotificationsPermission.requestPermission(this,binding.root)
 
+
+        binding.cardMoshaf.setOnClickListener {
+            val intent = Intent(this, MushafReaderActivity::class.java)
+            startActivity(intent)
+        }
 
         binding.cardSebha.setOnClickListener {
             val intent=Intent(this, SebhaActivity::class.java)

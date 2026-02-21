@@ -149,6 +149,13 @@ dependencies {
     implementation 'com.airbnb.android:lottie:6.3.0'
 
     implementation 'androidx.navigation:navigation-ui-ktx:2.7.7'
+
+    // Mushaf Reader
+    implementation 'io.coil-kt:coil:2.5.0'
+    implementation 'androidx.work:work-runtime-ktx:2.9.0'
+    implementation 'androidx.viewpager2:viewpager2:1.1.0'
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
 }
 
 

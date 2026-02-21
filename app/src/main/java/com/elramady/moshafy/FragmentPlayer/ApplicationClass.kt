@@ -4,6 +4,7 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
+import com.elramady.moshafy.mushaf.worker.MushafDownloadScheduler
 
 class ApplicationClass: Application() {
     companion object{
@@ -19,6 +20,7 @@ class ApplicationClass: Application() {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+        MushafDownloadScheduler.scheduleDownload(this)
     }
 
     private fun createNotificationChannel() {
