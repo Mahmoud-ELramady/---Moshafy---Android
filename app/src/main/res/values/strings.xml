@@ -10,6 +10,9 @@
     <string name="bookmark_removed">تمت إزالة العلامة</string>
     <string name="download_progress_format">جاري التحميل: %1$d / %2$d</string>
     <string name="no_bookmarks">لا توجد علامات</string>
+    <string name="mushaf_settings">اعدادات المصحف</string>
+    <string name="surahs">السور</string>
+    <string name="surahs_dialog_title">اختر السورة</string>
     <string name="quranEnglish">القرأن</string>
     <string name="textProgress">انتظر يبدأ التحميل الان</string>
     <string name="search">Search</string>

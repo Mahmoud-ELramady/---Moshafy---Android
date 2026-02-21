@@ -3,21 +3,29 @@ package com.elramady.moshafy.mushaf.presentation
 import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.elramady.moshafy.R
 import com.elramady.moshafy.databinding.ActivityMushafReaderBinding
 import com.elramady.moshafy.mushaf.config.MushafConfig
+import com.elramady.moshafy.mushaf.config.MushafSurahPageMapping
 import com.elramady.moshafy.mushaf.data.local.MushafDatabase
 import com.elramady.moshafy.mushaf.data.repository.MushafImageRepository
+import com.elramady.moshafy.room.DataBase
+import com.elramady.moshafy.vo.SurahsNames.Data
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -46,6 +54,7 @@ class MushafReaderActivity : AppCompatActivity() {
         setupViewPager()
         setupPageIndicator()
         setupButtons()
+        setupSettingsToggle()
         observeDownloadProgress()
     }
 
@@ -108,7 +117,60 @@ class MushafReaderActivity : AppCompatActivity() {
         binding.btnBookmarksList.setOnClickListener {
             startActivity(Intent(this, MushafBookmarksActivity::class.java))
         }
+        binding.btnSurahs.setOnClickListener { showSurahsDialog() }
     }
+
+    private fun setupSettingsToggle() {
+        binding.tvMushafSettingsToggle.setOnClickListener {
+            if (binding.settingMushaf.isVisible) {
+                binding.settingMushaf.animate()
+                    .alpha(0f)
+                    .setDuration(200)
+                    .withEndAction {
+                        binding.settingMushaf.visibility = View.GONE
+                        binding.settingMushaf.alpha = 1f
+                    }
+                    .start()
+            } else {
+                binding.settingMushaf.alpha = 0f
+                binding.settingMushaf.visibility = View.VISIBLE
+                binding.settingMushaf.animate()
+                    .alpha(1f)
+                    .setDuration(200)
+                    .start()
+            }
+        }
+    }
+
+    private fun showSurahsDialog() {
+        DataBase.getInstance(this).surahsDao.getSurahsRoom()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { surahs -> showSurahsDialogWithList(surahs) },
+                { Toast.makeText(this, getString(R.string.no_bookmarks), Toast.LENGTH_SHORT).show() }
+            )
+    }
+
+    private fun showSurahsDialogWithList(surahs: List<Data>) {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_mushaf_surahs, null)
+        val recycler = dialogView.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recycler_surahs)
+        recycler.layoutManager = LinearLayoutManager(this)
+        val dialogAdapter = MushafSurahsDialogAdapter { surah ->
+            val page = MushafSurahPageMapping.getPageForSurah(surah.number)
+            binding.viewPager.setCurrentItem(page - 1, true)
+            surahsDialog?.dismiss()
+        }
+        recycler.adapter = dialogAdapter
+        dialogAdapter.submitList(surahs)
+        surahsDialog = AlertDialog.Builder(this)
+            .setTitle(getString(R.string.surahs_dialog_title))
+            .setView(dialogView)
+            .setNegativeButton(getString(R.string.cancel)) { d, _ -> d.dismiss() }
+            .show()
+    }
+
+    private var surahsDialog: AlertDialog? = null
 
     private fun showPagePickerDialog() {
         val currentPage = (binding.viewPager.currentItem + 1).coerceIn(1, MushafConfig.TOTAL_PAGES)
@@ -151,6 +213,12 @@ class MushafReaderActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.refreshDownloadProgress()
+    }
+
+    override fun onDestroy() {
+        surahsDialog?.dismiss()
+        surahsDialog = null
+        super.onDestroy()
     }
 
     companion object {
