@@ -2,9 +2,14 @@ package com.elramady.moshafy.mushaf.presentation
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -25,6 +30,7 @@ class MushafReaderActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, true)
         binding = ActivityMushafReaderBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -46,6 +52,24 @@ class MushafReaderActivity : AppCompatActivity() {
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        val titleView = TextView(this).apply {
+            text = getString(R.string.moshaf)
+            setTextColor(ContextCompat.getColor(this@MushafReaderActivity, android.R.color.white))
+            textSize = 20f
+            gravity = Gravity.RIGHT or Gravity.CENTER_VERTICAL
+            setPadding(0, 0, resources.getDimensionPixelSize(R.dimen._10dp), 0)
+            ResourcesCompat.getFont(this@MushafReaderActivity, R.font.font_app)?.let { typeface ->
+                setTypeface(typeface)
+            }
+        }
+        val params = androidx.appcompat.widget.Toolbar.LayoutParams(
+            androidx.appcompat.widget.Toolbar.LayoutParams.MATCH_PARENT,
+            androidx.appcompat.widget.Toolbar.LayoutParams.MATCH_PARENT
+        ).apply {
+            gravity = Gravity.RIGHT or Gravity.CENTER_VERTICAL
+        }
+        binding.toolbar.addView(titleView, params)
         binding.toolbar.setNavigationOnClickListener { finish() }
     }
 
