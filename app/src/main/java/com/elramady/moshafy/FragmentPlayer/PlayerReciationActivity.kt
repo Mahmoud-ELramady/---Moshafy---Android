@@ -282,8 +282,18 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
         this.runOnUiThread(Runnable {
             if (musicService != null) {
                 val mCurrentPosition = (musicService!!.getCurrentPosition().toInt() ) / 1000
+                val duration = (musicService?.getDuration()?.toInt() ?: 0) / 1000
+                val isPlaying = musicService?.isPlaying() ?: false
+                
+                // Update UI
                 binding.seekPlayer.progress=mCurrentPosition
                 binding.timePlayer.text = formattedTime(mCurrentPosition)
+                
+                // Sync notification progress with Activity UI (single source of truth)
+                // Only update if playing to avoid unnecessary updates when paused
+                if (isPlaying && duration > 0) {
+                    musicService?.updateNotificationProgress(mCurrentPosition, duration, isPlaying)
+                }
             }
             handler.postDelayed(this, 1000)
         })
