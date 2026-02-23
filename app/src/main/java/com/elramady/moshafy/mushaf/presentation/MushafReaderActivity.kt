@@ -9,13 +9,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.elramady.moshafy.Api.SwarClient
 import com.elramady.moshafy.R
 import com.elramady.moshafy.databinding.ActivityMushafReaderBinding
 import com.elramady.moshafy.mushaf.config.MushafConfig
@@ -24,6 +25,7 @@ import com.elramady.moshafy.mushaf.data.local.MushafDatabase
 import com.elramady.moshafy.mushaf.data.repository.MushafImageRepository
 import com.elramady.moshafy.room.DataBase
 import com.elramady.moshafy.vo.SurahsNames.Data
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.collectLatest
@@ -35,6 +37,11 @@ class MushafReaderActivity : AppCompatActivity() {
     private lateinit var viewModel: MushafReaderViewModel
     private lateinit var pageLoader: MushafPageLoader
     private lateinit var adapter: MushafPageAdapter
+
+    private val roomDisposables = CompositeDisposable()
+    private val networkDisposables = io.reactivex.rxjava3.disposables.CompositeDisposable()
+    private var isFetchingSurahs = false
+    private var surahsLoadingDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -143,13 +150,87 @@ class MushafReaderActivity : AppCompatActivity() {
     }
 
     private fun showSurahsDialog() {
-        DataBase.getInstance(this).surahsDao.getSurahsRoom()
+        if (isFetchingSurahs) return
+
+        val db = DataBase.getInstance(this)
+        val disposable = db.surahsDao.getSurahsRoom()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { surahs -> showSurahsDialogWithList(surahs) },
-                { Toast.makeText(this, getString(R.string.no_bookmarks), Toast.LENGTH_SHORT).show() }
+                { surahs ->
+                    if (surahs.isNotEmpty()) {
+                        showSurahsDialogWithList(surahs)
+                    } else {
+                        fetchSurahsFromRemoteThenCacheAndShow()
+                    }
+                },
+                { _ -> fetchSurahsFromRemoteThenCacheAndShow() }
             )
+
+        roomDisposables.add(disposable)
+    }
+
+    private fun fetchSurahsFromRemoteThenCacheAndShow() {
+        if (isFetchingSurahs) return
+        isFetchingSurahs = true
+        showSurahsLoading(true)
+
+        val api = SwarClient.getSwarClient()
+        val disposable = api.getSurhasNames()
+            .subscribeOn(io.reactivex.rxjava3.schedulers.Schedulers.io())
+            .observeOn(io.reactivex.rxjava3.android.schedulers.AndroidSchedulers.mainThread())
+            .subscribe(
+                { response ->
+                    val surahs = response.data
+                    cacheSurahsToRoomAndShow(surahs)
+                },
+                { _ ->
+                    isFetchingSurahs = false
+                    showSurahsLoading(false)
+                    Toast.makeText(this, getString(R.string.surahs_loading_failed), Toast.LENGTH_SHORT).show()
+                }
+            )
+
+        networkDisposables.add(disposable)
+    }
+
+    private fun cacheSurahsToRoomAndShow(surahs: List<Data>) {
+        val db = DataBase.getInstance(this)
+        val disposable = db.surahsDao.doInsert(surahs)
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    isFetchingSurahs = false
+                    showSurahsLoading(false)
+                    showSurahsDialogWithList(surahs)
+                },
+                { _ ->
+                    isFetchingSurahs = false
+                    showSurahsLoading(false)
+                    Toast.makeText(this, getString(R.string.surahs_loading_failed), Toast.LENGTH_SHORT).show()
+                }
+            )
+        roomDisposables.add(disposable)
+    }
+
+    private fun showSurahsLoading(show: Boolean) {
+        if (show) {
+            if (surahsLoadingDialog?.isShowing == true) return
+            val progress = android.widget.ProgressBar(this)
+            surahsLoadingDialog = AlertDialog.Builder(this)
+                .setTitle(getString(R.string.surahs_loading))
+                .setView(progress)
+                .setCancelable(true)
+                .setOnCancelListener {
+                    // allow cancel; next click can retry
+                    isFetchingSurahs = false
+                }
+                .show()
+        } else {
+            surahsLoadingDialog?.dismiss()
+            surahsLoadingDialog = null
+        }
     }
 
     private fun showSurahsDialogWithList(surahs: List<Data>) {
@@ -218,6 +299,10 @@ class MushafReaderActivity : AppCompatActivity() {
     override fun onDestroy() {
         surahsDialog?.dismiss()
         surahsDialog = null
+        surahsLoadingDialog?.dismiss()
+        surahsLoadingDialog = null
+        roomDisposables.clear()
+        networkDisposables.clear()
         super.onDestroy()
     }
 
