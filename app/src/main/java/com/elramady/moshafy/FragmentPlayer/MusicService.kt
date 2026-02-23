@@ -15,7 +15,9 @@ import android.media.MediaPlayer
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
+import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -66,8 +68,8 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
     override fun onCreate() {
         super.onCreate()
         mediaSessionCompat = MediaSessionCompat(this, "My Audio")
-//        val mediaMetaData=MediaMetadata.Builder().putLong(MediaMetadata.METADATA_KEY_DURATION,-1L).build()
-//        mediaSessionCompat.setMetadata(MediaMetadataCompat.fromMediaMetadata(mediaMetaData))
+        // Set MediaSessionCompat as active - required for notification to work properly
+        mediaSessionCompat.isActive = true
         Log.e("closeee","new Service")
         pref=getSharedPreferences("isPlayingDestroy", MODE_PRIVATE)
 
@@ -247,19 +249,26 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
         this.nameSurah=nameSurah
         this.nameReciter=nameReciter
 
+        // Update MediaSessionCompat metadata and playback state
+        updateMediaSessionMetadata(nameReciter, nameSurah, max)
+        updateMediaSessionPlaybackState(progress, max, playPauseBtn == R.drawable.pause_noti)
 
+        // Create intent to open PlayerReciationActivity when notification is clicked
+        // This works even if app process was killed
         val intent = Intent(this, PlayerReciationActivity::class.java).apply {
-            flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            // Add extras to restore state if needed
+            putExtra("url", url)
+            putExtra("surah_Name", nameSurah)
+            putExtra("position", position)
         }
+        
         val resultPendingIntent: PendingIntent? = TaskStackBuilder.create(this).run {
             // Add the intent, which inflates the back stack
             addNextIntentWithParentStack(intent)
             // Get the PendingIntent containing the entire back stack
             getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
-//        intent.addCategory(Intent.CATEGORY_LAUNCHER)
-//        intent.setAction(Intent.ACTION_MAIN)
-
 
         val  notificationIntent_Close:Intent  = Intent(this, NotificationReceiver::class.java)
             .setAction(ApplicationClass.ACTION_CLOSE)
@@ -267,12 +276,6 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
        val closePending:PendingIntent  = PendingIntent.getBroadcast(this,
         0, notificationIntent_Close,
            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE);
-
-
-
-
-//        val contentIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-
 
         val prevIntent = Intent(this, NotificationReceiver::class.java)
                 .setAction(ApplicationClass.ACTION_PREVIOUS)
@@ -286,24 +289,15 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
                 .getBroadcast(this, 0, pauseIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
-
         val nextIntent = Intent(this, NotificationReceiver::class.java)
                 .setAction(ApplicationClass.ACTION_NEXT)
         val nextPending: PendingIntent = PendingIntent
                 .getBroadcast(this, 0, nextIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
-
-
         Log.e("log2", "log2")
 
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
-//
-//        }
         val icon= BitmapFactory.decodeResource(resources,R.drawable.photo_play)
-
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
@@ -313,40 +307,71 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
                     .setContentText(nameReciter)
                     .setLargeIcon(icon)
                     .setColor(Color.WHITE)
-                    //.setProgress(max,progress,false)
-                    .setAutoCancel(true)
-
-              // .setContentIntent(resultPendingIntent)
+                    // Add progress bar - max is duration in seconds, progress is current position in seconds
+                    .setProgress(max, progress, false)
+                    .setContentIntent(resultPendingIntent) // Enable notification tap to open player
                     .addAction(R.drawable.previous_audio, "Previous", prevPending)
                     .addAction(playPauseBtn, "Pause", pausePending)
                     .addAction(R.drawable.next_audio, "next", nextPending)
                      .addAction(R.drawable.ic_close,"Close",closePending)
                      .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
-                            .setMediaSession(mediaSessionCompat.sessionToken))
-//                .setStyle(androidx.media.app.NotificationCompat.MediaStyle())
+                            .setMediaSession(mediaSessionCompat.sessionToken)
+                            .setShowActionsInCompactView(0, 1, 2)) // Show prev, play/pause, next in compact view
                      .setOnlyAlertOnce(true)
                      .setAutoCancel(true)
                      .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-
+                    .setOngoing(true) // Make notification non-dismissible while playing
                     .build()
 
-
-
+            // Start foreground service BEFORE showing notification to ensure it appears
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 startForeground(2, notification!!, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
             } else {
                 startForeground(2, notification)
             }
-
-
         }
+    }
+
+    /**
+     * Update MediaSessionCompat metadata with current track information
+     */
+    private fun updateMediaSessionMetadata(nameReciter: String, nameSurah: String, duration: Int) {
+        val metadata = MediaMetadataCompat.Builder()
+            .putString(MediaMetadataCompat.METADATA_KEY_TITLE, nameSurah)
+            .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, nameReciter)
+            .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, nameReciter)
+            .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, (duration * 1000).toLong()) // Convert to milliseconds
+            .build()
+        mediaSessionCompat.setMetadata(metadata)
+    }
+
+    /**
+     * Update MediaSessionCompat playback state
+     */
+    private fun updateMediaSessionPlaybackState(currentPosition: Int, duration: Int, isPlaying: Boolean) {
+        val playbackState = PlaybackStateCompat.Builder()
+            .setState(
+                if (isPlaying) PlaybackStateCompat.STATE_PLAYING else PlaybackStateCompat.STATE_PAUSED,
+                (currentPosition * 1000).toLong(), // Convert to milliseconds
+                1.0f // Playback speed
+            )
+            .setActions(
+                PlaybackStateCompat.ACTION_PLAY or
+                PlaybackStateCompat.ACTION_PAUSE or
+                PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
+                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
+                PlaybackStateCompat.ACTION_SEEK_TO
+            )
+            .build()
+        mediaSessionCompat.setPlaybackState(playbackState)
     }
 
 
     override fun onDestroy() {
         super.onDestroy()
-
+        // Release MediaSessionCompat to free resources
+        mediaSessionCompat.release()
     }
 
 fun callBack(actionPlaying: ActionPlaying){
@@ -359,6 +384,85 @@ fun callBack(actionPlaying: ActionPlaying){
         intent.putExtra(CHANNEL_ID_2, notificationId)
         return PendingIntent.getActivity(context, 0, intent,
             PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+    }
+
+    /**
+     * Update notification progress without recreating the entire notification
+     * This is more efficient for frequent updates
+     */
+    @SuppressLint("ForegroundServiceType")
+    fun updateNotificationProgress(progress: Int, max: Int, isPlaying: Boolean) {
+        if (notification == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return
+        }
+
+        // Update MediaSessionCompat playback state
+        updateMediaSessionPlaybackState(progress, max, isPlaying)
+
+        val playPauseBtn = if (isPlaying) R.drawable.pause_noti else R.drawable.play_noti
+
+        val prevIntent = Intent(this, NotificationReceiver::class.java)
+            .setAction(ApplicationClass.ACTION_PREVIOUS)
+        val prevPending: PendingIntent = PendingIntent
+            .getBroadcast(this, 0, prevIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
+        val pauseIntent = Intent(this, NotificationReceiver::class.java)
+            .setAction(ApplicationClass.ACTION_PLAY)
+        val pausePending: PendingIntent = PendingIntent
+            .getBroadcast(this, 0, pauseIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
+        val nextIntent = Intent(this, NotificationReceiver::class.java)
+            .setAction(ApplicationClass.ACTION_NEXT)
+        val nextPending: PendingIntent = PendingIntent
+            .getBroadcast(this, 0, nextIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
+        val notificationIntent_Close: Intent = Intent(this, NotificationReceiver::class.java)
+            .setAction(ApplicationClass.ACTION_CLOSE)
+        val closePending: PendingIntent = PendingIntent.getBroadcast(this,
+            0, notificationIntent_Close,
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
+        val intent = Intent(this, PlayerReciationActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra("url", url)
+            putExtra("surah_Name", nameSurah)
+            putExtra("position", position)
+        }
+        val resultPendingIntent: PendingIntent? = TaskStackBuilder.create(this).run {
+            addNextIntentWithParentStack(intent)
+            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        }
+
+        val icon = BitmapFactory.decodeResource(resources, R.drawable.photo_play)
+
+        notification = NotificationCompat.Builder(this, ApplicationClass.CHANNEL_ID_2)
+            .setSmallIcon(R.drawable.icon_logo)
+            .setContentTitle(nameSurah)
+            .setContentText(nameReciter)
+            .setLargeIcon(icon)
+            .setColor(Color.WHITE)
+            .setProgress(max, progress, false)
+            .setContentIntent(resultPendingIntent)
+            .addAction(R.drawable.previous_audio, "Previous", prevPending)
+            .addAction(playPauseBtn, "Pause", pausePending)
+            .addAction(R.drawable.next_audio, "next", nextPending)
+            .addAction(R.drawable.ic_close, "Close", closePending)
+            .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
+                .setMediaSession(mediaSessionCompat.sessionToken)
+                .setShowActionsInCompactView(0, 1, 2))
+            .setOnlyAlertOnce(true)
+            .setAutoCancel(true)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setOngoing(true)
+            .build()
+
+        // Update the existing notification
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(2, notification)
     }
 
 

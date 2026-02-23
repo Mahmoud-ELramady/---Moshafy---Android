@@ -28,9 +28,8 @@ class ApplicationClass: Application() {
             val channel1=NotificationChannel(CHANNEL_ID_1,"Channel(1)",NotificationManager.IMPORTANCE_HIGH)
             channel1.description="Channel 1 Desc..."
 
-
             val channel2=NotificationChannel(CHANNEL_ID_2,"Channel(2)",NotificationManager.IMPORTANCE_HIGH)
-            channel1.description="Channel 2 Desc..."
+            channel2.description="Channel 2 Desc..." // Fixed: was using channel1.description
 
 
             val notificationManager:NotificationManager=getSystemService(NotificationManager::class.java)
