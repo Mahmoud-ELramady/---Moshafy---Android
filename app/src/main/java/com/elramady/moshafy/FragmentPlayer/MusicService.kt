@@ -38,6 +38,9 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
     lateinit var mediaSessionCompat: MediaSessionCompat
      var notification: Notification?=null
 
+    /** Cached artwork bitmap - decoded once, reused for all notification updates to avoid repeated decode. */
+    private var cachedNotificationIcon: Bitmap? = null
+
      private var actionPlaying: ActionPlaying?=null
     lateinit var url:String
 
@@ -70,6 +73,14 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
         mediaSessionCompat = MediaSessionCompat(this, "My Audio")
         // Set MediaSessionCompat as active - required for notification to work properly
         mediaSessionCompat.isActive = true
+        // Handle seek from notification/lock screen - route to same seekTo() used by Activity
+        mediaSessionCompat.setCallback(object : MediaSessionCompat.Callback() {
+            override fun onSeekTo(pos: Long) {
+                if (mediaPlayer != null) {
+                    seekTo(pos.toInt())
+                }
+            }
+        })
         Log.e("closeee","new Service")
         pref=getSharedPreferences("isPlayingDestroy", MODE_PRIVATE)
 
@@ -320,7 +331,7 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
 
         Log.e("log2", "log2")
 
-        val icon= BitmapFactory.decodeResource(resources,R.drawable.photo_play)
+        val icon = getOrCreateNotificationIcon()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
@@ -391,8 +402,19 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
     }
 
 
+    /**
+     * Decode notification artwork once and reuse for all updates to avoid repeated bitmap decode (SkJpegCodec lag).
+     */
+    private fun getOrCreateNotificationIcon(): Bitmap? {
+        if (cachedNotificationIcon == null) {
+            cachedNotificationIcon = BitmapFactory.decodeResource(resources, R.drawable.photo_play)
+        }
+        return cachedNotificationIcon
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        cachedNotificationIcon = null
         // Release MediaSessionCompat to free resources
         mediaSessionCompat.release()
     }
@@ -579,7 +601,7 @@ fun callBack(actionPlaying: ActionPlaying){
             getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
 
-        val icon = BitmapFactory.decodeResource(resources, R.drawable.photo_play)
+        val icon = getOrCreateNotificationIcon()
 
         notification = NotificationCompat.Builder(this, ApplicationClass.CHANNEL_ID_2)
             .setSmallIcon(R.drawable.icon_logo)
