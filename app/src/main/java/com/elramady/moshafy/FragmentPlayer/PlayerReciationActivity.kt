@@ -77,8 +77,8 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
         fragPlayNow= PlayingNowFragment()
         fragPlayNow.setActionFrag(this)
 
-        url = intent.getStringExtra("url")!!
-        nameSurah = intent.getStringExtra("surah_Name")!!
+        url = intent.getStringExtra("url") ?: ""
+        nameSurah = intent.getStringExtra("surah_Name") ?: ""
         nameReciter = ReciationsActivity.name_reciter
         position = intent.getIntExtra("position", 0)
 
@@ -315,8 +315,13 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
 
 
 
-
     }
+
+
+
+
+
+
 
     override fun onServiceDisconnected(name: ComponentName?) {
 //musicService=null
@@ -609,8 +614,9 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
         return random.nextInt(i+1)
     }
 
-
-
-
-
 }
+
+
+
+
+

@@ -79,14 +79,27 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action.equals("PLAY")){
-            url= intent?.getStringExtra("urlService").toString()
-            nameReciter= intent?.getStringExtra("nameReciterService").toString()
-            nameSurah= intent?.getStringExtra("nameSurahService").toString()
-            Log.e("name",nameSurah+"   "+nameReciter)
+            val newUrl = intent?.getStringExtra("urlService").toString()
+            val newNameReciter = intent?.getStringExtra("nameReciterService").toString()
+            val newNameSurah = intent?.getStringExtra("nameSurahService").toString()
+            Log.e("name",newNameSurah+"   "+newNameReciter)
 
-            if (url !=null || url !=""){
-                playMedia(url)
-                Log.e("phase","phase")
+            if (newUrl.isNotEmpty() && newUrl != "null" && newUrl != "null"){
+                // Check if we're already playing the same URL - if so, just update notification
+                if (mediaPlayer != null && url == newUrl && ::nameSurah.isInitialized && nameSurah == newNameSurah) {
+                    // Same track already playing - just ensure notification is visible
+                    val currentPos = getCurrentPosition() / 1000
+                    val duration = getDuration()?.div(1000) ?: 0
+                    val playPauseIcon = if (isPlaying()) R.drawable.pause_noti else R.drawable.play_noti
+                    showNotification(playPauseIcon, nameReciter, nameSurah, duration, currentPos)
+                } else {
+                    // New track or player doesn't exist - start playback
+                    url = newUrl
+                    nameReciter = newNameReciter
+                    nameSurah = newNameSurah
+                    playMedia(url)
+                    Log.e("phase","phase")
+                }
             }
         }
 
@@ -97,15 +110,21 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
         when (actionName){
             "playPause" -> {
                 if (actionPlaying!=null){
+                    // Activity is bound - use existing callback
                     actionPlaying?.playPauseBtnClick()
+                } else if (mediaPlayer != null) {
+                    // Activity not bound - handle directly in service
+                    handlePlayPauseDirectly()
                 }
             }
             "Next" ->{
                 try {
-
                     if (actionPlaying!=null) {
+                        // Activity is bound - use existing callback
                         actionPlaying?.nextBtnClick()
-
+                    } else if (mediaPlayer != null) {
+                        // Activity not bound - try to handle if we have reciations list
+                        handleNextDirectly()
                     }
                 }catch (e:Exception){
                     Log.e("errorNext",e.toString())
@@ -114,7 +133,11 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
             }
             "Previous"->{
                 if (actionPlaying!=null){
+                    // Activity is bound - use existing callback
                     actionPlaying?.prevBtnClick()
+                } else if (mediaPlayer != null) {
+                    // Activity not bound - try to handle if we have reciations list
+                    handlePreviousDirectly()
                 }
             }
             "Close"->{
@@ -384,6 +407,126 @@ fun callBack(actionPlaying: ActionPlaying){
         intent.putExtra(CHANNEL_ID_2, notificationId)
         return PendingIntent.getActivity(context, 0, intent,
             PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+    }
+
+    /**
+     * Handle play/pause directly in service when Activity is not bound
+     */
+    private fun handlePlayPauseDirectly() {
+        if (mediaPlayer == null) return
+        
+        val isCurrentlyPlaying = mediaPlayer!!.isPlaying
+        if (isCurrentlyPlaying) {
+            pause()
+        } else {
+            start()
+        }
+        
+        // Update notification with current state
+        val currentPos = getCurrentPosition() / 1000
+        val duration = getDuration()?.div(1000) ?: 0
+        val playPauseIcon = if (mediaPlayer!!.isPlaying) R.drawable.pause_noti else R.drawable.play_noti
+        showNotification(playPauseIcon, nameReciter, nameSurah, duration, currentPos)
+    }
+
+    /**
+     * Handle next track directly in service when Activity is not bound
+     */
+    private fun handleNextDirectly() {
+        // Try to use static reciations list if available
+        val reciationsList = com.elramady.moshafy.Adapters.ReciationsAdapter.reciationsList
+        if (reciationsList.isEmpty()) {
+            Log.e("MusicService", "Cannot handle next - reciations list is empty")
+            return
+        }
+        
+        // Update position using same logic as Activity
+        if (com.elramady.moshafy.ui.ReciationsActivity.shuffleBoolean && 
+            !com.elramady.moshafy.ui.ReciationsActivity.repeatBoolean) {
+            position = getRandomPosition(reciationsList.size - 1)
+        } else if (!com.elramady.moshafy.ui.ReciationsActivity.shuffleBoolean && 
+                   !com.elramady.moshafy.ui.ReciationsActivity.repeatBoolean) {
+            position = (position + 1) % reciationsList.size
+        }
+        
+        // Load next track
+        if (position < reciationsList.size) {
+            val nextUrl = reciationsList[position].url
+            val wasPlaying = mediaPlayer?.isPlaying ?: false
+            
+            stop()
+            release()
+            createMediaPlayer(nextUrl)
+            nameSurah = reciationsList[position].name
+            
+            // Update notification
+            val duration = getDuration()?.div(1000) ?: 0
+            val playPauseIcon = if (wasPlaying) R.drawable.pause_noti else R.drawable.play_noti
+            showNotification(playPauseIcon, nameReciter, nameSurah, duration, 0)
+            
+            if (wasPlaying) {
+                start()
+                showNotification(R.drawable.pause_noti, nameReciter, nameSurah, duration, 0)
+            }
+            
+            onCompleted()
+        }
+    }
+
+    /**
+     * Handle previous track directly in service when Activity is not bound
+     */
+    private fun handlePreviousDirectly() {
+        // Try to use static reciations list if available
+        val reciationsList = com.elramady.moshafy.Adapters.ReciationsAdapter.reciationsList
+        if (reciationsList.isEmpty()) {
+            Log.e("MusicService", "Cannot handle previous - reciations list is empty")
+            return
+        }
+        
+        // Update position using same logic as Activity
+        if (com.elramady.moshafy.ui.ReciationsActivity.shuffleBoolean && 
+            !com.elramady.moshafy.ui.ReciationsActivity.repeatBoolean) {
+            position = getRandomPosition(reciationsList.size - 1)
+        } else if (!com.elramady.moshafy.ui.ReciationsActivity.shuffleBoolean && 
+                   !com.elramady.moshafy.ui.ReciationsActivity.repeatBoolean) {
+            if (position - 1 < 0) {
+                position = reciationsList.size - 1
+            } else {
+                position = position - 1
+            }
+        }
+        
+        // Load previous track
+        if (position < reciationsList.size) {
+            val prevUrl = reciationsList[position].url
+            val wasPlaying = mediaPlayer?.isPlaying ?: false
+            
+            stop()
+            release()
+            createMediaPlayer(prevUrl)
+            nameSurah = reciationsList[position].name
+            
+            // Update notification
+            val duration = getDuration()?.div(1000) ?: 0
+            val playPauseIcon = if (wasPlaying) R.drawable.pause_noti else R.drawable.play_noti
+            showNotification(playPauseIcon, nameReciter, nameSurah, duration, 0)
+            
+            if (wasPlaying) {
+                start()
+                showNotification(R.drawable.pause_noti, nameReciter, nameSurah, duration, 0)
+            }
+            
+            onCompleted()
+        }
+    }
+
+    /**
+     * Helper method to get random position (same logic as Activity)
+     */
+    private fun getRandomPosition(max: Int): Int {
+        val random = java.util.Random()
+        return random.nextInt(max + 1)
     }
 
     /**
