@@ -94,6 +94,42 @@
 
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/card_reciter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:clickable="true"
+                        app:cardElevation="@dimen/_6sdp"
+                        app:cardCornerRadius="@dimen/_12sdp"
+                        android:layout_margin="@dimen/_12sdp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:padding="@dimen/_18sdp"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="@dimen/_50sdp"
+                                android:layout_height="@dimen/_50sdp"
+                                android:src="@drawable/icon_reciter" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/iconReciters"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:textAlignment="viewEnd"
+                                android:textColor="#000"
+                                android:textSize="@dimen/_15sdp" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
                         android:id="@+id/card_moshaf"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -114,7 +150,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_50sdp"
                                 android:layout_height="@dimen/_50sdp"
-                                android:src="@drawable/quran" />
+                                android:src="@drawable/mushaf_icon" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -128,46 +164,6 @@
                         </LinearLayout>
 
                     </com.google.android.material.card.MaterialCardView>
-
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/card_tafseers"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        android:clickable="true"
-                        app:cardElevation="@dimen/_6sdp"
-                        app:cardCornerRadius="@dimen/_12sdp"
-                        android:layout_margin="@dimen/_12sdp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:padding="@dimen/_18sdp"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:layout_width="@dimen/_50sdp"
-                                android:layout_height="@dimen/_50sdp"
-                                android:src="@drawable/tafseer_icon" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/tafseerIcon"
-                                android:layout_marginTop="@dimen/_10sdp"
-                                android:textAlignment="viewEnd"
-                                android:textColor="#000"
-                                android:textSize="@dimen/_15sdp" />
-
-                        </LinearLayout>
-
-                    </com.google.android.material.card.MaterialCardView>
-
-
-
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/card_quran_translate"
@@ -207,49 +203,8 @@
 
                     </com.google.android.material.card.MaterialCardView>
 
-
-
                     <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/azkar_card"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        android:clickable="true"
-                        app:cardElevation="@dimen/_6sdp"
-                        app:cardCornerRadius="@dimen/_12sdp"
-                        android:layout_margin="@dimen/_12sdp"
-                        android:focusable="true">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:padding="@dimen/_18sdp"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:layout_width="@dimen/_50sdp"
-                                android:layout_height="@dimen/_50sdp"
-                                android:src="@drawable/azar_icon" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/azkar"
-                                android:layout_marginTop="@dimen/_10sdp"
-                                android:textAlignment="viewEnd"
-                                android:textColor="#000"
-                                android:textSize="@dimen/_15sdp" />
-
-                        </LinearLayout>
-
-                    </com.google.android.material.card.MaterialCardView>
-
-
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/card_reciter"
+                        android:id="@+id/card_tafseers"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
@@ -269,12 +224,12 @@
                             <ImageView
                                 android:layout_width="@dimen/_50sdp"
                                 android:layout_height="@dimen/_50sdp"
-                                android:src="@drawable/icon_reciter" />
+                                android:src="@drawable/tafseer_icon" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/iconReciters"
+                                android:text="@string/tafseerIcon"
                                 android:layout_marginTop="@dimen/_10sdp"
                                 android:textAlignment="viewEnd"
                                 android:textColor="#000"
@@ -283,7 +238,6 @@
                         </LinearLayout>
 
                     </com.google.android.material.card.MaterialCardView>
-
 
 
                     <com.google.android.material.card.MaterialCardView
@@ -469,3 +423,44 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
+
+
+
+
+<!--<com.google.android.material.card.MaterialCardView-->
+<!--android:id="@+id/azkar_card"-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:layout_columnWeight="1"-->
+<!--android:layout_rowWeight="1"-->
+<!--android:clickable="true"-->
+<!--android:visibility="visible"-->
+<!--app:cardElevation="@dimen/_6sdp"-->
+<!--app:cardCornerRadius="@dimen/_12sdp"-->
+<!--android:layout_margin="@dimen/_12sdp"-->
+<!--android:focusable="true">-->
+
+<!--<LinearLayout-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:gravity="center"-->
+<!--    android:padding="@dimen/_18sdp"-->
+<!--    android:orientation="vertical">-->
+
+<!--    <ImageView-->
+<!--        android:layout_width="@dimen/_50sdp"-->
+<!--        android:layout_height="@dimen/_50sdp"-->
+<!--        android:src="@drawable/azar_icon" />-->
+
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/azkar"-->
+<!--        android:layout_marginTop="@dimen/_10sdp"-->
+<!--        android:textAlignment="viewEnd"-->
+<!--        android:textColor="#000"-->
+<!--        android:textSize="@dimen/_15sdp" />-->
+
+<!--</LinearLayout>-->
+
+<!--</com.google.android.material.card.MaterialCardView>-->

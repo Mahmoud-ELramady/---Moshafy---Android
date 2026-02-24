@@ -267,9 +267,8 @@
             android:layout_gravity="end"
             android:focusable="true"
             android:clickable="true"
-
-            android:layout_marginBottom="@dimen/_20sdp"
-            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_30sdp"
+            android:layout_marginEnd="@dimen/_30sdp"
             android:src="@drawable/download_icon"
             />
 

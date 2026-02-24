@@ -98,11 +98,11 @@ lateinit var pref: SharedPreferences
 
         }
 
-        binding.azkarCard.setOnClickListener {
-            val intent=Intent(this, AzkarTapActivity::class.java)
-            this.startActivity(intent)
-
-        }
+//        binding.azkarCard.setOnClickListener {
+//            val intent=Intent(this, AzkarTapActivity::class.java)
+//            this.startActivity(intent)
+//
+//        }
 
         binding.aboutApp.setOnClickListener {
             val thread=Thread(Runnable {
