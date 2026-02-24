@@ -397,6 +397,10 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
             .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, nameReciter)
             .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, nameReciter)
             .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, (duration * 1000).toLong()) // Convert to milliseconds
+            .putBitmap(
+                MediaMetadataCompat.METADATA_KEY_ALBUM_ART,
+                getOrCreateNotificationIcon()
+            )
             .build()
         mediaSessionCompat.setMetadata(metadata)
     }
@@ -426,10 +430,36 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
     /**
      * Decode notification artwork once and reuse for all updates to avoid repeated bitmap decode (SkJpegCodec lag).
      */
-    private fun getOrCreateNotificationIcon(): Bitmap? {
+    private fun getOrCreateNotificationIcon2(): Bitmap? {
         if (cachedNotificationIcon == null) {
             cachedNotificationIcon = BitmapFactory.decodeResource(resources, R.drawable.background_player)
         }
+        return cachedNotificationIcon
+    }
+
+    private fun getOrCreateNotificationIcon(): Bitmap? {
+
+        if (cachedNotificationIcon != null) return cachedNotificationIcon
+
+        val drawable = ContextCompat.getDrawable(this, R.drawable.icon_playing)
+            ?: return null
+
+        // الحجم المثالى للـ media artwork
+        val size = (resources.displayMetrics.density * 256).toInt()
+        // 256dp → بيتحول تقريبًا 512~768px حسب الجهاز
+
+        val bitmap = Bitmap.createBitmap(
+            size,
+            size,
+            Bitmap.Config.ARGB_8888
+        )
+
+        val canvas = Canvas(bitmap)
+
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+
+        cachedNotificationIcon = bitmap
         return cachedNotificationIcon
     }
 

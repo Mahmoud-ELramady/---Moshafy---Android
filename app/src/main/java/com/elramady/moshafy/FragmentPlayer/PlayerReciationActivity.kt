@@ -239,6 +239,8 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
         reciationsFrag = ReciationsAdapter.reciationsList
         binding.playPauseLayout.setImageResource(R.drawable.pause_audio)
 
+        showLoadingOverlay()
+
         val action="PLAY"
         val intent: Intent = Intent(this,MusicService::class.java)
         intent.putExtra("urlService", url)
@@ -247,6 +249,14 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
         intent.putExtra("positionSevice",position)
         intent.action=action
         startService(intent)
+    }
+
+    private fun showLoadingOverlay() {
+        binding.playerLoadingOverlay.visibility = View.VISIBLE
+    }
+
+    private fun hideLoadingOverlay() {
+        binding.playerLoadingOverlay.visibility = View.GONE
     }
 
     private fun metaData() {
@@ -322,9 +332,7 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
         musicService?.showNotification(R.drawable.pause_noti,nameReciter,nameSurah,(musicService?.getDuration())?.div(1000) ?: 0,(musicService!!.getCurrentPosition().toInt() ) / 1000)
         musicService?.onCompleted()
 
-
-
-
+        hideLoadingOverlay()
     }
 
 
@@ -444,80 +452,85 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
 
 
     override fun prevBtnClick() {
-//        loadingDialog.startLoadingDialog()
-        reciationsFrag=ReciationsAdapter.reciationsList
-        if (musicService!!.isPlaying()){
-            musicService!!.stop()
-            musicService!!.release()
+        showLoadingOverlay()
+        // Allow UI to render the overlay before blocking work (prepare()) starts.
+        binding.playerLoadingOverlay.post {
+            try {
+                reciationsFrag = ReciationsAdapter.reciationsList
+                if (musicService!!.isPlaying()) {
+                    musicService!!.stop()
+                    musicService!!.release()
 
-            if (ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean){
-                position=getPosition(reciationsFrag.size - 1)
-            }else if (!ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean){
-                if (position-1<0){
-                    position= reciationsFrag.size-1
-                }else{
-                    position=position-1
+                    if (ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean) {
+                        position = getPosition(reciationsFrag.size - 1)
+                    } else if (!ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean) {
+                        position = if (position - 1 < 0) reciationsFrag.size - 1 else position - 1
+                    }
+
+                    url = reciationsFrag[position].url
+                    Log.e("urlPrev", url)
+                    musicService!!.createMediaPlayer(url)
+                    metaData()
+                    nameSurah = reciationsFrag[position].name
+                    binding.reciterReciationNameTextView.text =
+                        nameReciter + " - " + nameSurah + "           " + nameReciter + " - " + nameSurah
+                    binding.seekPlayer.max = musicService?.getDuration()?.div(1000) ?: 0
+
+                    this.runOnUiThread(Runnable {
+                        if (musicService != null) {
+                            val mCurrentPosition = musicService?.getCurrentPosition()?.div(1000) ?: 0
+                            binding.seekPlayer.setProgress(mCurrentPosition)
+                        }
+                        handler.postDelayed(this, 1000)
+                    })
+                    musicService?.onCompleted()
+                    musicService?.showNotification(
+                        R.drawable.pause_noti,
+                        nameReciter,
+                        nameSurah,
+                        (musicService?.getDuration())?.div(1000) ?: 0,
+                        (musicService!!.getCurrentPosition().toInt()) / 1000
+                    )
+                    binding.playPauseLayout.setImageResource(R.drawable.pause_audio)
+                    musicService?.start()
+                } else {
+                    musicService?.stop()
+                    musicService?.release()
+                    if (ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean) {
+                        position = getPosition(reciationsFrag.size - 1)
+                    } else if (!ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean) {
+                        position = if (position - 1 < 0) reciationsFrag.size - 1 else position - 1
+                    }
+                    url = reciationsFrag[position].url
+
+                    musicService?.createMediaPlayer(url)
+                    metaData()
+                    nameSurah = reciationsFrag[position].name
+                    binding.reciterReciationNameTextView.text =
+                        nameReciter + " - " + nameSurah + "           " + nameReciter + " - " + nameSurah
+                    binding.seekPlayer.max = musicService?.getDuration()?.div(1000) ?: 0
+
+                    this.runOnUiThread(Runnable {
+                        if (musicService != null) {
+                            val mCurrentPosition = musicService?.getCurrentPosition()?.div(1000) ?: 0
+                            binding.seekPlayer.setProgress(mCurrentPosition)
+                        }
+                        handler.postDelayed(this, 1000)
+                    })
+                    musicService?.onCompleted()
+                    musicService?.showNotification(
+                        R.drawable.play_noti,
+                        nameReciter,
+                        nameSurah,
+                        (musicService?.getDuration())?.div(1000) ?: 0,
+                        (musicService!!.getCurrentPosition().toInt()) / 1000
+                    )
+                    binding.playPauseLayout.setImageResource(R.drawable.play_audio)
                 }
+            } finally {
+                hideLoadingOverlay()
             }
-
-            url= reciationsFrag.get(position).url
-            Log.e("urlPrev",url)
-            musicService!!.createMediaPlayer(url)
-            metaData()
-            nameSurah= reciationsFrag.get(position).name
-            binding.reciterReciationNameTextView.text= nameReciter+" - "+nameSurah+"           "+nameReciter + " - " + nameSurah
-            binding.seekPlayer.max= musicService?.getDuration()?.div(1000) ?:0
-
-            this.runOnUiThread(Runnable {
-                if (musicService!=null){
-                    val mCurrentPosition= musicService?.getCurrentPosition()?.div(1000)?:0
-                    binding.seekPlayer.setProgress(mCurrentPosition)
-                }
-                handler.postDelayed(this,1000)
-
-            } )
-            musicService?.onCompleted()
-            musicService?.showNotification(R.drawable.pause_noti,nameReciter,nameSurah,(musicService?.getDuration())?.div(1000) ?: 0,(musicService!!.getCurrentPosition().toInt() ) / 1000)
-            binding.playPauseLayout.setImageResource(R.drawable.pause_audio)
-            musicService?.start()
-
-        }else{
-            musicService?.stop()
-            musicService?.release()
-            if (ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean){
-                position=getPosition(reciationsFrag.size - 1)
-            }else if (!ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean){
-                if (position-1<0){
-                    position= reciationsFrag.size-1
-                }else{
-                    position=position-1
-                }
-            }
-            url= reciationsFrag.get(position).url
-
-            musicService?.createMediaPlayer(url)
-            metaData()
-            nameSurah= reciationsFrag.get(position).name
-            binding.reciterReciationNameTextView.text= nameReciter+" - "+nameSurah+"           "+nameReciter + " - " + nameSurah
-            binding.seekPlayer.max= musicService?.getDuration()?.div(1000) ?:0
-
-
-            this.runOnUiThread(Runnable {
-                if (musicService!=null){
-                    var  mCurrentPosition= musicService?.getCurrentPosition()?.div(1000)?:0
-                    binding.seekPlayer.setProgress(mCurrentPosition)
-                }
-                handler.postDelayed(this,1000)
-
-            } )
-            musicService?.onCompleted()
-
-
-            musicService?.showNotification(R.drawable.play_noti,nameReciter,nameSurah,(musicService?.getDuration())?.div(1000) ?: 0,(musicService!!.getCurrentPosition().toInt() ) / 1000)
-            binding.playPauseLayout.setImageResource(R.drawable.play_audio)
         }
-
-//        loadingDialog.dismissDialog()
     }
 
     override fun closeBtnClick() {
@@ -548,72 +561,85 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
 
     }
      override fun nextBtnClick()  {
-        if (musicService!!.isPlaying()){
-            musicService?.stop()
-            musicService?.release()
+        showLoadingOverlay()
+        // Allow UI to render the overlay before blocking work (prepare()) starts.
+        binding.playerLoadingOverlay.post {
+            try {
+                if (musicService!!.isPlaying()) {
+                    musicService?.stop()
+                    musicService?.release()
 
-            if (ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean){
-                position=getPosition(reciationsFrag.size - 1)
-            }else if (!ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean){
-                position=(position+1) % reciationsFrag.size
-            }
+                    if (ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean) {
+                        position = getPosition(reciationsFrag.size - 1)
+                    } else if (!ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean) {
+                        position = (position + 1) % reciationsFrag.size
+                    }
 
-            url= reciationsFrag.get(position).url
-            musicService?.createMediaPlayer(url)
-            metaData()
+                    url = reciationsFrag[position].url
+                    musicService?.createMediaPlayer(url)
+                    metaData()
 
-            nameSurah= reciationsFrag.get(position).name
-            binding.reciterReciationNameTextView.text= nameReciter+" - "+nameSurah+"           "+nameReciter + " - " + nameSurah
-            binding.seekPlayer.max= musicService?.getDuration()?.div(1000) ?: 0
+                    nameSurah = reciationsFrag[position].name
+                    binding.reciterReciationNameTextView.text =
+                        nameReciter + " - " + nameSurah + "           " + nameReciter + " - " + nameSurah
+                    binding.seekPlayer.max = musicService?.getDuration()?.div(1000) ?: 0
 
-            this.runOnUiThread(Runnable {
-                if (musicService!=null){
-                    var  mCurrentPosition= musicService?.getCurrentPosition()?.div(1000)?:0
-                    binding.seekPlayer.setProgress(mCurrentPosition)
+                    this.runOnUiThread(Runnable {
+                        if (musicService != null) {
+                            val mCurrentPosition = musicService?.getCurrentPosition()?.div(1000) ?: 0
+                            binding.seekPlayer.setProgress(mCurrentPosition)
+                        }
+                        handler.postDelayed(this, 1000)
+                    })
+
+                    musicService?.onCompleted()
+                    musicService?.showNotification(
+                        R.drawable.pause_noti,
+                        nameReciter,
+                        nameSurah,
+                        (musicService?.getDuration())?.div(1000) ?: 0,
+                        (musicService!!.getCurrentPosition().toInt()) / 1000
+                    )
+                    binding.playPauseLayout.setBackgroundResource(R.drawable.pause_audio)
+                    musicService?.start()
+                } else {
+                    musicService?.stop()
+                    musicService?.release()
+
+                    if (ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean) {
+                        position = getPosition(reciationsFrag.size - 1)
+                    } else if (!ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean) {
+                        position = (position + 1) % reciationsFrag.size
+                    }
+                    url = reciationsFrag[position].url
+                    musicService!!.createMediaPlayer(url)
+                    metaData()
+                    nameSurah = reciationsFrag[position].name
+
+                    binding.reciterReciationNameTextView.text =
+                        nameReciter + " - " + nameSurah + "           " + nameReciter + " - " + nameSurah
+                    binding.seekPlayer.max = musicService?.getDuration()?.div(1000) ?: 0
+
+                    this.runOnUiThread(Runnable {
+                        if (musicService != null) {
+                            val mCurrentPosition = musicService!!.getCurrentPosition() / 1000
+                            binding.seekPlayer.setProgress(mCurrentPosition)
+                        }
+                        handler.postDelayed(this, 1000)
+                    })
+                    musicService?.onCompleted()
+                    musicService?.showNotification(
+                        R.drawable.play_noti,
+                        nameReciter,
+                        nameSurah,
+                        (musicService?.getDuration())?.div(1000) ?: 0,
+                        (musicService!!.getCurrentPosition().toInt()) / 1000
+                    )
+                    binding.playPauseLayout.setBackgroundResource(R.drawable.play_audio)
                 }
-                handler.postDelayed(this,1000)
-
-            })
-
-
-            musicService?.onCompleted()
-            musicService?.showNotification(R.drawable.pause_noti,nameReciter,nameSurah,(musicService?.getDuration())?.div(1000) ?: 0,(musicService!!.getCurrentPosition().toInt() ) / 1000)
-            binding.playPauseLayout.setBackgroundResource(R.drawable.pause_audio)
-            musicService?.start()
-
-
-        }else{
-            musicService?.stop()
-            musicService?.release()
-
-            if (ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean){
-                position=getPosition(reciationsFrag.size - 1)
-            }else if (!ReciationsActivity.shuffleBoolean && !ReciationsActivity.repeatBoolean){
-                position=(position+1) % reciationsFrag.size
+            } finally {
+                hideLoadingOverlay()
             }
-            url= reciationsFrag.get(position).url
-            musicService!!.createMediaPlayer(url)
-            metaData()
-            nameSurah= reciationsFrag.get(position).name
-
-            binding.reciterReciationNameTextView.text= nameReciter+" - "+nameSurah+"           "+nameReciter + " - " + nameSurah
-            binding.seekPlayer.max= musicService?.getDuration()?.div(1000) ?:0
-
-
-            this.runOnUiThread(Runnable {
-                if (musicService!=null){
-                    var mCurrentPosition=musicService!!.getCurrentPosition()/1000
-                    binding.seekPlayer.setProgress(mCurrentPosition)
-                }
-                handler.postDelayed(this,1000)
-
-            } )
-            musicService?.onCompleted()
-            musicService?.showNotification(R.drawable.play_noti,nameReciter,nameSurah,(musicService?.getDuration())?.div(1000) ?: 0,(musicService!!.getCurrentPosition().toInt() ) / 1000)
-            binding.playPauseLayout.setBackgroundResource(R.drawable.play_audio)
-
-
-
         }
     }
 
