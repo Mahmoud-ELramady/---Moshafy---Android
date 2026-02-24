@@ -15,6 +15,8 @@
         tools:context=".FragmentPlayer.PlayerReciationActivity">
 
 
+
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/player_background_view"
             android:layout_width="0dp"
@@ -25,22 +27,38 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
         <FrameLayout
             android:id="@+id/top_frame_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginEnd="8dp"
             android:elevation="10dp"
             android:outlineProvider="none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/player_background_view">
+            app:layout_constraintTop_toTopOf="parent"
+            >
 
         </FrameLayout>
+        <TextView
+            android:id="@+id/text_title"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="وَإِذَا قُرِئَ ٱلۡقُرۡءَانُ\nفَٱسۡتَمِعُواْ لَهُ وَأَنصِتُواْ لَعَلَّكُمۡ تُرۡحَمُونَ\n(سورة الأعراف 204)"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/purple_700"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:textSize="@dimen/_18sdp"
+            android:layout_marginTop="@dimen/_30sdp"
+            app:layout_constraintTop_toBottomOf="@+id/top_frame_layout"
+            />
 
         <TextView
             android:id="@+id/reciter_reciation_name_text_view"
@@ -114,7 +132,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/background_player_image_view"
             android:layout_width="match_parent"
@@ -128,33 +145,28 @@
             android:layout_marginTop="@dimen/_20sdp"
              app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/top_frame_layout"
+            app:layout_constraintTop_toBottomOf="@id/text_title"
             >
 
             <ImageView
                 android:id="@+id/image_json"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_200sdp"
+                android:layout_height="@dimen/_150sdp"
                 app:srcCompat="@drawable/photo_play"
                 android:scaleType="centerCrop"
                 />
 
         </com.google.android.material.card.MaterialCardView>
 
-
-
-
-
-   <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/parent_play"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_constraintTop_toBottomOf="@id/seek_bar_layout"
-    android:layout_marginTop="50dp"
+    android:layout_marginTop="20dp"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     android:layout_gravity="center"
-
     >
 
 
@@ -196,11 +208,6 @@
             app:layout_constraintEnd_toStartOf="@id/play_pause_layout"
             app:layout_constraintTop_toTopOf="@id/play_pause_layout"
             android:src="@drawable/backword_button" />
-
-
-
-
-
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/play_pause_layout"
@@ -260,6 +267,7 @@
             android:layout_gravity="end"
             android:focusable="true"
             android:clickable="true"
+
             android:layout_marginBottom="@dimen/_20sdp"
             android:layout_marginEnd="@dimen/_20sdp"
             android:src="@drawable/download_icon"
@@ -273,6 +281,7 @@
             android:background="#80000000"
             android:clickable="true"
             android:focusable="true"
+            android:elevation="999dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -299,6 +308,7 @@
                     android:textSize="14sp" />
             </LinearLayout>
         </FrameLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

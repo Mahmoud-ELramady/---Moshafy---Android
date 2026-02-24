@@ -13,12 +13,14 @@ import android.util.Log
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.SeekBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
@@ -148,6 +150,10 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
                 binding.repeatImageView.setImageResource(R.drawable.repeat_on)
             }
         }
+
+        val textTitle: TextView = findViewById(R.id.text_title)
+        val typeface = ResourcesCompat.getFont(this, R.font.font_smart)
+        textTitle.typeface = typeface
 
     }
 
