@@ -8,6 +8,7 @@ import android.content.SharedPreferences
 import android.content.pm.ServiceInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.media.AudioAttributes
@@ -19,8 +20,10 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
+import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.elramady.moshafy.FragmentPlayer.ApplicationClass.Companion.CHANNEL_ID_2
 import com.elramady.moshafy.R
@@ -80,6 +83,23 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
                     seekTo(pos.toInt())
                 }
             }
+
+            override fun onPlay() {
+                actionPlaying?.playPauseBtnClick()
+            }
+
+            override fun onPause() {
+                actionPlaying?.playPauseBtnClick()
+            }
+
+            override fun onSkipToNext() {
+                actionPlaying?.nextBtnClick()
+            }
+
+            override fun onSkipToPrevious() {
+                actionPlaying?.prevBtnClick()
+            }
+
         })
         Log.e("closeee","new Service")
         pref=getSharedPreferences("isPlayingDestroy", MODE_PRIVATE)
@@ -296,7 +316,7 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
             putExtra("surah_Name", nameSurah)
             putExtra("position", position)
         }
-        
+
         val resultPendingIntent: PendingIntent? = TaskStackBuilder.create(this).run {
             // Add the intent, which inflates the back stack
             addNextIntentWithParentStack(intent)
@@ -307,26 +327,27 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
         val  notificationIntent_Close:Intent  = Intent(this, NotificationReceiver::class.java)
             .setAction(ApplicationClass.ACTION_CLOSE)
 
-       val closePending:PendingIntent  = PendingIntent.getBroadcast(this,
-        0, notificationIntent_Close,
+        val closePending:PendingIntent  = PendingIntent.getBroadcast(this,
+        104, notificationIntent_Close,
            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE);
 
         val prevIntent = Intent(this, NotificationReceiver::class.java)
                 .setAction(ApplicationClass.ACTION_PREVIOUS)
+
         val prevPending: PendingIntent = PendingIntent
-                .getBroadcast(this, 0, prevIntent,
+                .getBroadcast(this, 101, prevIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         val pauseIntent = Intent(this, NotificationReceiver::class.java)
                 .setAction(ApplicationClass.ACTION_PLAY)
         val pausePending: PendingIntent = PendingIntent
-                .getBroadcast(this, 0, pauseIntent,
+                .getBroadcast(this, 102, pauseIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         val nextIntent = Intent(this, NotificationReceiver::class.java)
                 .setAction(ApplicationClass.ACTION_NEXT)
         val nextPending: PendingIntent = PendingIntent
-                .getBroadcast(this, 0, nextIntent,
+                .getBroadcast(this, 103, nextIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         Log.e("log2", "log2")
@@ -407,7 +428,7 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
      */
     private fun getOrCreateNotificationIcon(): Bitmap? {
         if (cachedNotificationIcon == null) {
-            cachedNotificationIcon = BitmapFactory.decodeResource(resources, R.drawable.photo_play)
+            cachedNotificationIcon = BitmapFactory.decodeResource(resources, R.drawable.background_player)
         }
         return cachedNotificationIcon
     }
@@ -417,6 +438,7 @@ class MusicService : Service() ,MediaPlayer.OnCompletionListener {
         cachedNotificationIcon = null
         // Release MediaSessionCompat to free resources
         mediaSessionCompat.release()
+
     }
 
 fun callBack(actionPlaying: ActionPlaying){
@@ -569,25 +591,25 @@ fun callBack(actionPlaying: ActionPlaying){
         val prevIntent = Intent(this, NotificationReceiver::class.java)
             .setAction(ApplicationClass.ACTION_PREVIOUS)
         val prevPending: PendingIntent = PendingIntent
-            .getBroadcast(this, 0, prevIntent,
+            .getBroadcast(this, 101, prevIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         val pauseIntent = Intent(this, NotificationReceiver::class.java)
             .setAction(ApplicationClass.ACTION_PLAY)
         val pausePending: PendingIntent = PendingIntent
-            .getBroadcast(this, 0, pauseIntent,
+            .getBroadcast(this, 102, pauseIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         val nextIntent = Intent(this, NotificationReceiver::class.java)
             .setAction(ApplicationClass.ACTION_NEXT)
         val nextPending: PendingIntent = PendingIntent
-            .getBroadcast(this, 0, nextIntent,
+            .getBroadcast(this, 103, nextIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         val notificationIntent_Close: Intent = Intent(this, NotificationReceiver::class.java)
             .setAction(ApplicationClass.ACTION_CLOSE)
         val closePending: PendingIntent = PendingIntent.getBroadcast(this,
-            0, notificationIntent_Close,
+            104, notificationIntent_Close,
             PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         val intent = Intent(this, PlayerReciationActivity::class.java).apply {

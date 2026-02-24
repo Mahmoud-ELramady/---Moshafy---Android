@@ -117,7 +117,7 @@
         <receiver
             android:name=".FragmentPlayer.NotificationReceiver"
             android:enabled="true"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="actionPrevious" />
                 <action android:name="actionNext" />
