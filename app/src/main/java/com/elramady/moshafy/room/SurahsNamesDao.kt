@@ -2,6 +2,7 @@ package com.elramady.moshafy.room
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.elramady.moshafy.vo.AzkarListen.AzkarListeningItem
 import com.elramady.moshafy.vo.RecitersDetails.RecitersDetails
@@ -19,7 +20,7 @@ import kotlin.jvm.internal.Reflection
 @Dao
 interface SurahsNamesDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun doInsert(d:List<Data>):Completable
 
     @Query("select * from surhas_names_table")
