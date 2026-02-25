@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.*
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.RelativeLayout
 import android.widget.SeekBar
 import android.widget.TextView
@@ -259,10 +260,15 @@ class PlayerReciationActivity : AppCompatActivity(),ActionPlaying,Runnable,Servi
 
     private fun showLoadingOverlay() {
         binding.playerLoadingOverlay.visibility = View.VISIBLE
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        )
     }
 
     private fun hideLoadingOverlay() {
         binding.playerLoadingOverlay.visibility = View.GONE
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
     private fun metaData() {
