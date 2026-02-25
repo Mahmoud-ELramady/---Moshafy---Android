@@ -70,6 +70,7 @@
                         android:layout_width="@dimen/_35sdp"
                         android:layout_height="@dimen/_35sdp"
                         android:src="@drawable/twitter"
+                        android:visibility="gone"
                         android:layout_marginStart="@dimen/_10sdp" />
 
                     <ImageView

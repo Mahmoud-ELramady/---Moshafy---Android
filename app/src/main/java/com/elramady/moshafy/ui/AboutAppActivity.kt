@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import com.elramady.moshafy.R
 import com.elramady.moshafy.databinding.ActivityAboutAppBinding
+import androidx.core.net.toUri
 
 class AboutAppActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.R)
@@ -36,9 +37,9 @@ class AboutAppActivity : AppCompatActivity() {
         }
 
         binding.linkedin.setOnClickListener {
-            val uri: Uri = Uri.parse("https://www.linkedin.com/in/mahmoud-el-ramady-05b79518a/")
-            val intent= Intent(Intent.ACTION_VIEW,uri)
-            this.startActivity(intent)
+            val uri = "https://linkedin.com/in/mahmoud-elramady-05b79518a".toUri()
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(intent)
         }
 
     }
