@@ -11,6 +11,7 @@ import com.elramady.moshafy.mushaf.data.repository.MushafImageRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,16 @@ class MushafReaderViewModel(application: Application) : AndroidViewModel(applica
 
     private val dao = MushafDatabase.getInstance(application).mushafDao()
     private val imageRepository = MushafImageRepository(application, dao)
+
+    init {
+        viewModelScope.launch {
+            dao.getDownloadedPagesCountFlow()
+                .catch { _ -> }
+                .collect { count ->
+                    _downloadProgress.value = DownloadProgress(count, MushafConfig.TOTAL_PAGES)
+                }
+        }
+    }
 
     private val _currentPage = MutableLiveData(1)
     val currentPage: LiveData<Int> = _currentPage

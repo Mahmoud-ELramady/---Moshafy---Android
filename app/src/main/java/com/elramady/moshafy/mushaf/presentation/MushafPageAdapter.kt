@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.elramady.moshafy.R
 import com.elramady.moshafy.mushaf.config.MushafConfig
 import com.github.chrisbanes.photoview.PhotoView
@@ -27,9 +28,11 @@ class MushafPageAdapter(
 
     inner class PageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val photoView: PhotoView = itemView.findViewById(R.id.photo_view)
+        private val pageLoadingOverlay: View = itemView.findViewById(R.id.page_loading_overlay)
 
         fun bind(pageNumber: Int) {
-            pageLoader.loadPage(pageNumber, photoView)
+            photoView.isZoomable=true
+            pageLoader.loadPage(pageNumber, photoView, pageLoadingOverlay)
         }
     }
 }

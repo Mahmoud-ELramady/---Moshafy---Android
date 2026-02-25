@@ -58,7 +58,7 @@ lateinit var binding:FragmentAzkarListeningBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding=DataBindingUtil.inflate(inflater,R.layout.fragment_azkar_listening, container, false)
-        loadingDialog= LoadingDialog(activity!!)
+        loadingDialog= LoadingDialog(requireActivity())
 
         apiService= SwarClient.getAzkarClient()
 
@@ -66,12 +66,12 @@ lateinit var binding:FragmentAzkarListeningBinding
 
         viewModel=getViewModel()
 
-        db= DataBase.getInstance(context!!)
+        db= DataBase.getInstance(requireContext())
         roomViewModel=getRoomViewModel()
 
         val rc: RecyclerView =binding.azkarListListening
         rc.layoutManager= LinearLayoutManager(context)
-       adapter = AzkarListeningAdapter(activity!!,this)
+       adapter = AzkarListeningAdapter(requireActivity(),this)
 
         rc.adapter=adapter
         rc.setHasFixedSize(true)
@@ -89,14 +89,14 @@ lateinit var binding:FragmentAzkarListeningBinding
 
     fun checkRun(){
 
-        var pref: SharedPreferences =activity!!.getSharedPreferences("getPrefsAzkar", AppCompatActivity.MODE_PRIVATE)
+        var pref: SharedPreferences =requireActivity().getSharedPreferences("getPrefsAzkar", AppCompatActivity.MODE_PRIVATE)
 
         if(pref.getBoolean("firstRunAzkar",true)){
             loadingDialog.startLoadingDialog()
-            val manager: ConnectivityManager = activity!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val manager: ConnectivityManager = requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val networkInfo: NetworkInfo? =manager.getActiveNetworkInfo()
             if (networkInfo!=null && networkInfo.isConnected()){
-                viewModel.azkar.observe(this, Observer {
+                viewModel.azkar.observe(viewLifecycleOwner, Observer {
                     roomViewModel.insertAzkarListeningList(it)
                     adapter.setList(it)
                     pref.edit().putBoolean("firstRunAzkar", false).commit()
@@ -112,7 +112,7 @@ lateinit var binding:FragmentAzkarListeningBinding
         }else{
 
             roomViewModel.getazkarListeningList()
-            roomViewModel.azkarListeningListDb.observe(this, Observer {
+            roomViewModel.azkarListeningListDb.observe(viewLifecycleOwner, Observer {
                 adapter.setList(it)
             })
 
@@ -159,7 +159,7 @@ lateinit var binding:FragmentAzkarListeningBinding
 
 
     private fun alertDialog(url:String,name: String,reader: String) {
-        val alertDialog= AlertDialog.Builder(context!!)
+        val alertDialog= AlertDialog.Builder(requireContext())
         alertDialog.setTitle("تحميل الأذكار")
         alertDialog.setIcon(R.drawable.icon_logo)
         alertDialog.setMessage("تأكيد تحميل الأذكار؟")
@@ -191,7 +191,7 @@ lateinit var binding:FragmentAzkarListeningBinding
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             return true
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ActivityCompat.checkSelfPermission(context!!, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(
                     arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     PlayerReciationActivity.REQUESTED_CODE
@@ -220,7 +220,7 @@ lateinit var binding:FragmentAzkarListeningBinding
     }
 
     fun downloadReciation(url:String,name: String,reader: String,outPutFileName:String) {
-        if (ConnectivityUtil.isConnected(context!!)){
+        if (ConnectivityUtil.isConnected(requireContext())){
             Toast.makeText(context,"انظر لوحة الاشعارات",Toast.LENGTH_SHORT).show()
             val request: DownloadManager.Request = DownloadManager.Request(Uri.parse(url))
             request.setTitle(name+" - "+reader)
@@ -228,11 +228,11 @@ lateinit var binding:FragmentAzkarListeningBinding
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             request.allowScanningByMediaScanner()
             request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,outPutFileName)
-            val manager=activity!!.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+            val manager=requireActivity().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
             manager.enqueue(request)
         }else{
             Toast.makeText(context,"تأكد من اتصالك بالأنترنت", Toast.LENGTH_SHORT).show()
-            activity!!.finish()
+            requireActivity().finish()
         }
 
 

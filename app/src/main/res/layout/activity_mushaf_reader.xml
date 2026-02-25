@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
+        android:visibility="gone"
         android:background="?attr/colorPrimaryVariant">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -32,6 +33,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:fitsSystemWindows="true"
             android:layout_weight="1">
 
             <androidx.viewpager2.widget.ViewPager2
@@ -69,19 +71,34 @@
             android:id="@+id/tv_mushaf_settings_toggle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
+            android:background="@drawable/rounded_mushaf_settings"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingTop="@dimen/_10dp"
+            android:paddingBottom="@dimen/_22sdp"
+            android:paddingStart="@dimen/_12sdp"
+            android:paddingEnd="@dimen/_12sdp">
+
+            <!-- Text في الوسط -->
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/tv_mushaf_settings_text"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_mushaf_settings"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:paddingBottom="@dimen/_22sdp"
-                android:paddingTop="@dimen/_10dp"
+                android:layout_gravity="center"
                 android:text="@string/mushaf_settings"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_15sdp"
                 android:fontFamily="@font/font_app" />
 
+            <!-- أيقونة Close -->
+            <ImageView
+                android:id="@+id/iv_close_mushaf_settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_close"
+                android:paddingStart="@dimen/_8sdp"/>
         </LinearLayout>
 
 
@@ -92,7 +109,76 @@
             android:orientation="vertical"
             android:padding="@dimen/_12sdp"
             android:background="?attr/colorPrimaryVariant"
-            android:visibility="gone">
+            android:visibility="visible">
+
+            <LinearLayout
+                android:id="@+id/setting_mushaf_download_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:layout_marginBottom="@dimen/_8sdp">
+
+                <TextView
+                    android:id="@+id/tv_setting_mushaf_download_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mushaf_preparing_offline_title"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/_14sdp"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:gravity="center" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tv_setting_mushaf_download_pages"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/_12sdp"
+                        android:minWidth="@dimen/_48sdp"
+                        android:visibility="gone"
+                        tools:text="272 / 604" />
+
+                    <TextView
+                        android:id="@+id/tv_setting_mushaf_download_percent_total"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/_12sdp"
+                        android:minWidth="@dimen/_36sdp"
+                        android:text="100%"
+                        tools:text="100%"
+                        android:gravity="end"
+                        />
+
+                    <ProgressBar
+                        android:id="@+id/progress_setting_mushaf_download"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:max="100"
+                        android:progress="0"
+                        android:layout_marginHorizontal="@dimen/_8sdp"
+                        android:progressTint="@android:color/white" />
+
+                    <TextView
+                        android:id="@+id/tv_setting_mushaf_download_percent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/_12sdp"
+                        android:minWidth="@dimen/_36sdp"
+                        android:gravity="start"
+                        tools:text="45%" />
+                </LinearLayout>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_page_indicator"
@@ -122,6 +208,20 @@
                     android:gravity="center">
 
                     <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_surahs"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:layout_weight="1"
+                        app:cornerRadius="@dimen/_10sdp"
+                        app:strokeWidth="0dp"
+                        android:backgroundTint="@color/purple_500"
+                        android:layout_marginEnd="@dimen/_8sdp"
+
+                        android:text="@string/surahs" />
+
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_page_picker"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="wrap_content"
@@ -132,7 +232,8 @@
                         app:cornerRadius="@dimen/_10sdp"
                         app:strokeWidth="0dp"
                         android:backgroundTint="@color/purple_500"
-                        android:layout_marginEnd="@dimen/_8sdp" />
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_bookmark"
@@ -157,18 +258,6 @@
                         app:strokeWidth="0dp"
                         android:backgroundTint="@color/purple_500"
                         android:layout_marginEnd="@dimen/_8sdp" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_surahs"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:layout_weight="1"
-                        app:cornerRadius="@dimen/_10sdp"
-                        app:strokeWidth="0dp"
-                        android:backgroundTint="@color/purple_500"
-                        android:text="@string/surahs" />
 
                 </LinearLayout>
 

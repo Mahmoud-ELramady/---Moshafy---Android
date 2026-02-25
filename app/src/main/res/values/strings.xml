@@ -9,6 +9,10 @@
     <string name="bookmark_added">تمت إضافة العلامة</string>
     <string name="bookmark_removed">تمت إزالة العلامة</string>
     <string name="download_progress_format">جاري التحميل: %1$d / %2$d</string>
+    <string name="mushaf_preparing_offline_title">يتم تجهيز المصحف للاستخدام بدون اتصال</string>
+    <string name="mushaf_download_pages_format">%1$d / %2$d</string>
+    <string name="mushaf_download_percent_format">%d%%</string>
+    <string name="mushaf_loading_page">جاري تحميل الصفحة…</string>
     <string name="no_bookmarks">لا توجد علامات</string>
     <string name="mushaf_settings">اعدادات المصحف</string>
     <string name="surahs">السور</string>

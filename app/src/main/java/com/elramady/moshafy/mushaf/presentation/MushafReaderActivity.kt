@@ -128,24 +128,44 @@ class MushafReaderActivity : AppCompatActivity() {
     }
 
     private fun setupSettingsToggle() {
+
         binding.tvMushafSettingsToggle.setOnClickListener {
             if (binding.settingMushaf.isVisible) {
-                binding.settingMushaf.animate()
-                    .alpha(0f)
-                    .setDuration(200)
-                    .withEndAction {
-                        binding.settingMushaf.visibility = View.GONE
-                        binding.settingMushaf.alpha = 1f
-                    }
-                    .start()
+               visibleMushafSettings(false)
+                binding.ivCloseMushafSettings.visibility= View.GONE
             } else {
-                binding.settingMushaf.alpha = 0f
-                binding.settingMushaf.visibility = View.VISIBLE
-                binding.settingMushaf.animate()
-                    .alpha(1f)
-                    .setDuration(200)
-                    .start()
+                visibleMushafSettings(true)
+                binding.ivCloseMushafSettings.visibility= View.VISIBLE
             }
+        }
+
+        binding.ivCloseMushafSettings.setOnClickListener {
+            if (binding.settingMushaf.isVisible) {
+                visibleMushafSettings(false)
+                binding.ivCloseMushafSettings.visibility= View.GONE
+            } else {
+                visibleMushafSettings(true)
+            }
+        }
+    }
+
+    private fun visibleMushafSettings(show: Boolean) {
+        if (show) {
+            binding.settingMushaf.alpha = 0f
+            binding.settingMushaf.visibility = View.VISIBLE
+            binding.settingMushaf.animate()
+                .alpha(1f)
+                .setDuration(200)
+                .start()
+        } else {
+            binding.settingMushaf.animate()
+                .alpha(0f)
+                .setDuration(200)
+                .withEndAction {
+                    binding.settingMushaf.visibility = View.GONE
+                    binding.settingMushaf.alpha = 1f
+                }
+                .start()
         }
     }
 
@@ -284,16 +304,19 @@ class MushafReaderActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.downloadProgress.collectLatest { progress ->
                 val isDownloading = progress.downloaded < progress.total
-                binding.downloadProgressContainer.isVisible = isDownloading
-                binding.tvDownloadProgress.text = getString(R.string.download_progress_format, progress.downloaded, progress.total)
+                binding.settingMushafDownloadSection.isVisible = isDownloading
+                if (isDownloading) {
+                    binding.tvSettingMushafDownloadPages.text = getString(R.string.mushaf_download_pages_format, progress.downloaded, progress.total)
+                    val percent = if (progress.total > 0) progress.downloaded * 100 / progress.total else 0
+                    binding.progressSettingMushafDownload.progress = percent
+                    binding.tvSettingMushafDownloadPercent.text = getString(R.string.mushaf_download_percent_format, percent)
+                }
             }
         }
-        viewModel.refreshDownloadProgress()
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.refreshDownloadProgress()
     }
 
     override fun onDestroy() {

@@ -25,6 +25,9 @@ interface MushafDao {
     @Query("SELECT COUNT(*) FROM mushaf_downloaded_pages")
     suspend fun getDownloadedPagesCount(): Int
 
+    @Query("SELECT COUNT(*) FROM mushaf_downloaded_pages")
+    fun getDownloadedPagesCountFlow(): Flow<Int>
+
     @Query("SELECT MAX(pageNumber) FROM mushaf_downloaded_pages")
     suspend fun getLastDownloadedPageNumber(): Int?
 
