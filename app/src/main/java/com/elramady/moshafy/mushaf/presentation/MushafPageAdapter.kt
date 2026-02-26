@@ -20,7 +20,8 @@ class MushafPageAdapter(
     }
 
     override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
-        val pageNumber = position + 1
+        // Reversed mapping: position 0 = page 604 (left), position 603 = page 1 (right) so swipe-right = next page
+        val pageNumber = MushafConfig.TOTAL_PAGES - position
         holder.bind(pageNumber)
     }
 

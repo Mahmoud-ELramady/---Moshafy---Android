@@ -89,21 +89,27 @@ class MushafReaderActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener { finish() }
     }
 
+    /** ViewPager position to mushaf page number (1-based). Reversed so swipe-right = next page. */
+    private fun positionToPage(position: Int): Int = MushafConfig.TOTAL_PAGES - position
+
+    /** Mushaf page number (1-based) to ViewPager position. */
+    private fun pageToPosition(pageNumber: Int): Int = MushafConfig.TOTAL_PAGES - pageNumber
+
     private fun setupViewPager() {
         adapter = MushafPageAdapter(pageLoader)
         binding.viewPager.adapter = adapter
         binding.viewPager.orientation = androidx.viewpager2.widget.ViewPager2.ORIENTATION_HORIZONTAL
         binding.viewPager.offscreenPageLimit = 2
-
+        binding.viewPager.layoutDirection = View.LAYOUT_DIRECTION_LTR
         val startPage = intent.getIntExtra(EXTRA_PAGE_NUMBER, -1).let {
             if (it in 1..MushafConfig.TOTAL_PAGES) it else viewModel.getLastReadPage()
         }
-        binding.viewPager.setCurrentItem(startPage - 1, false)
+        binding.viewPager.setCurrentItem(pageToPosition(startPage), false)
         updatePageIndicator(startPage)
 
         binding.viewPager.registerOnPageChangeCallback(object : androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                val pageNumber = position + 1
+                val pageNumber = positionToPage(position)
                 viewModel.setCurrentPage(pageNumber)
                 updatePageIndicator(pageNumber)
             }
@@ -259,7 +265,7 @@ class MushafReaderActivity : AppCompatActivity() {
         recycler.layoutManager = LinearLayoutManager(this)
         val dialogAdapter = MushafSurahsDialogAdapter { surah ->
             val page = MushafSurahPageMapping.getPageForSurah(surah.number)
-            binding.viewPager.setCurrentItem(page - 1, true)
+            binding.viewPager.setCurrentItem(pageToPosition(page), true)
             surahsDialog?.dismiss()
         }
         recycler.adapter = dialogAdapter
@@ -274,7 +280,7 @@ class MushafReaderActivity : AppCompatActivity() {
     private var surahsDialog: AlertDialog? = null
 
     private fun showPagePickerDialog() {
-        val currentPage = (binding.viewPager.currentItem + 1).coerceIn(1, MushafConfig.TOTAL_PAGES)
+        val currentPage = positionToPage(binding.viewPager.currentItem).coerceIn(1, MushafConfig.TOTAL_PAGES)
         val input = android.widget.EditText(this).apply {
             setHint("1 - ${MushafConfig.TOTAL_PAGES}")
             inputType = android.text.InputType.TYPE_CLASS_NUMBER
@@ -286,14 +292,14 @@ class MushafReaderActivity : AppCompatActivity() {
             .setView(input)
             .setPositiveButton(getString(R.string.sure)) { _, _ ->
                 val page = input.text.toString().toIntOrNull()?.coerceIn(1, MushafConfig.TOTAL_PAGES) ?: currentPage
-                binding.viewPager.setCurrentItem(page - 1, true)
+                binding.viewPager.setCurrentItem(pageToPosition(page), true)
             }
             .setNegativeButton(getString(R.string.cancel), null)
             .show()
     }
 
     private fun toggleBookmark() {
-        val pageNumber = binding.viewPager.currentItem + 1
+        val pageNumber = positionToPage(binding.viewPager.currentItem)
         viewModel.toggleBookmark(pageNumber) { isBookmarked ->
             val msg = if (isBookmarked) getString(R.string.bookmark_added) else getString(R.string.bookmark_removed)
             Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
